@@ -1,6 +1,6 @@
 ---
 name: evals
-description: Measure whether an AI feature actually works by looking at its outputs systematically — error analysis, a binary judge aligned to a human, and an eval set decomposed by mechanism. Use when building or validating an LLM output, agent, RAG, classifier, or prompt and you need to know if it's good — "is my prompt/agent good?", flaky AI output, choosing a model, before adding or shipping an LLM feature, even when no one asked for evals.
+description: Measure whether an AI feature actually works by looking at its outputs systematically — error analysis, a binary judge aligned to a human, and an eval set decomposed by mechanism. Use when building or validating an LLM output, agent, RAG, classifier, or prompt, or any model measured on a dataset — speech recognition (WER/CER), transcription quality, an embedding model, a benchmark on held-out data, or comparing two model checkpoints on your own recordings. Reach for it whenever you need to know if it's good — "is my prompt/agent good?", "which model is better?", flaky AI output, choosing a model, re-scoring a checkpoint on a held-out set, before adding or shipping an LLM feature, even when no one asked for evals. Triggers in any language, including Russian — "какая модель лучше", "прогони на нашей выборке", "пересчитай метрику", "ты чекал актуальные модели", "по бенчмаркам".
 ---
 
 # Evals
@@ -18,6 +18,18 @@ Any LLM call, agent, RAG pipeline, or classifier you're about to tune by feel, s
 Before any LLM-judge cleverness, ask: **can this be checked by code?** A cheap deterministic assertion beats an LLM judge on cost, speed, and reliability every time. Make the model emit its objective answer *first* (a number, a label, a JSON field), then its prose — so the check is `output startswith "X"` instead of an LLM-judge call on every case. Reserve LLM-as-judge for open-ended quality (tone, faithfulness, helpfulness) where no assertion exists.
 
 **For an agent, grade the final state — not the prose.** Assert on what the run actually left behind: the file it wrote, the row it inserted, the tests that now pass. Judging the agent's *narration* measures its writing, and a confident summary of work that didn't happen passes. Track **turn count, latency, and token cost as first-class metrics** next to correctness — otherwise you cannot see "right answer, wrong path." **"Correctly refused" has to be able to pass**: sometimes the right action is to *not* act, and a final-state assertion ("the balance moved") scores that correct decision as a failure — so assign the label **after** the run, reading the trace, not by fixing a predetermined end-state before it.
+
+## A model measured on a dataset (WER, CER, accuracy)
+
+Not every eval is a judge. Speech recognition, transcription, an embedding model, a classifier, checkpoint A vs B — these are graded by a number on a held-out set, and the discipline is different from a rubric:
+
+1. **Freeze the set once and never touch it.** Pick the recordings or rows, write them to a manifest with a hash, and treat editing that manifest as changing the measurement, exactly like the golden set below.
+2. **One command produces the number.** `make wer CKPT=frozen-207`, not a notebook someone re-runs by hand. A metric you cannot re-run in one line will not be re-run.
+3. **Compare only on the identical set.** Two checkpoints scored on different slices are not comparable — re-decode both, never reuse a number from an older set.
+4. **Print the sample size next to the number, always.** "WER 12.4%" is not a result; "WER 12.4%, 812 utterances / 4.1h" is. A bare number hides both noise and a set that quietly shrank.
+5. **Segment by mechanism here too** — speaker, channel, dialect, noise level, domain. One blended WER hides a change that fixed one segment and broke another.
+
+**"Better on their benchmark" and "better on our data" are different claims, and the second one decides.** A published leaderboard scores someone else's distribution recorded in someone else's conditions; it narrows the shortlist and nothing more. Before adopting or switching a model, decode your own frozen set with both candidates and compare there — including the model already in production, which is the only baseline that counts.
 
 ## The #1-ROI activity: look at your data (error analysis)
 

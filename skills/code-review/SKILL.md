@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: On-demand and pre-merge reviewer for a specific change — a pull request, a branch, or your uncommitted diff — returning severity-tagged findings, optionally posted to GitHub or applied as fixes. Use when someone hands you a change to review — "review this PR", "review my diff", "look over this branch", "is this change ok", "code review #123" — AND automatically before merging or landing a PR/branch ("merge this PR", "is this ready to merge", "land #123"): anything about to hit the base branch gets reviewed first, even when no one names a review. Outside the build pipeline, where compound-v:recheck owns the in-loop gate.
+description: On-demand and pre-merge reviewer for a specific change — a pull request, a branch, or your uncommitted diff — returning severity-tagged findings, optionally posted to GitHub or applied as fixes. Use when someone hands you a change to review — "review this PR", "review my diff", "look over this branch", "is this change ok", "code review PR 123" — AND automatically before merging or landing a PR/branch ("merge this PR", "is this ready to merge", "land PR 123"): anything about to hit the base branch gets reviewed first, even when no one names a review. Outside the build pipeline, where compound-v:recheck owns the in-loop gate. Triggers in any language, including Russian: "посмотри мой PR", "поревьюй ветку", "это можно мержить", "проверь коммиты перед мержем".
 ---
 
 # Code Review

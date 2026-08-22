@@ -1,12 +1,21 @@
 ---
 name: handoff
-description: Open, continue, or close the state file for work that will outlive one session. Use when starting multi-session or unattended work, before ending a session with work unfinished, or when the user says continue or resume (in any language) and a run may already be in progress.
+description: 'Open, continue, or close the state file for work that will outlive one session. Use when starting multi-session or unattended work, before ending a session with work unfinished, or when the user says continue or resume (in any language) and a run may already be in progress. Triggers in any language, including Russian: "дай промпт на продолжение", "передай следующей сессии", "запиши где мы остановились", "сохрани состояние".'
 ---
 
 # Handoff
 
-One state file per repo: `.claude/STATE.md`. Never a second "plan" or "analysis" sibling — a
-handoff split across two documents is a handoff that will go stale in one of them.
+One human-owned state file per repo: `.claude/STATE.md`. Never a second "plan" or "analysis" sibling
+— a handoff split across two documents is a handoff that will go stale in one of them.
+
+## Two state files, two owners
+
+`.claude/STATE.md` holds intent — the goal, the decisions, the next step — and is written by the
+human and the model. It lives in git and is what a fresh session reads to continue.
+`<repo>/.claude/state/live.md` holds the physical stopping point and is written only by the
+`state-live` hook. It is machine-owned and excluded from git. Read it when you need to know where
+the process actually stopped; never write it, never delete it, never hand it to anyone as the
+handoff.
 
 The single exception is **compound-v:get-shit-done**'s `.claude/slices.json`, and it is an exception
 because it is not narrative: it holds the declared-scope rows and their status — what exists, what
@@ -51,15 +60,26 @@ the failure above; two files that *cannot* overlap is not.
 ## Before a session ends with work unfinished
 
 Rewrite **Next** as one concrete action for a reader with zero context: the file, the function,
-the command. Commit. Then say in one line how to resume.
+the command. Fill **Suggested skills** with what the next session should invoke first. Commit.
+Then say in one line how to resume.
 
 ## When the work is done
 
-Delete `.claude/STATE.md` in the final commit — and `.claude/slices.json` with it, if the run opened
-one. Git history is the record. Both are run scaffolding; leaving either behind is how the next
-session inherits a stale ledger and trusts it.
+Rewrite `.claude/STATE.md` to match what was actually built, then commit it with the final change:
+**Done** carries the finished behavior and the evidence line that proves it, **Next** becomes the
+follow-up or `none`. Delete the file only when the entire run is finished *and* the human has
+confirmed it is finished — `.claude/slices.json` goes with it if the run opened one. Until then it
+stays in git: a session ending is not a run ending, and a fresh session has nothing else to resume
+from.
 
-Sweep before you delete, though — this section calls git the record, and **Do not** is the one part you already wrote down as what git cannot recover. So read it and the evidence lines once more and sort each entry: a dead end that only makes sense against this goal dies with the file, but the command that finally reproduced the bug, the env quirk that cost an hour, and the approach that will look attractive again in a later session are facts about the repo. Their home is `CLAUDE.md`/`AGENTS.md` — the file every session already reads, so a line there takes you out of the loop entirely (**compound-v:context-engineering** owns what qualifies and how to keep it small). Promote in the same commit that deletes; a fact you meant to move afterwards is a fact you lost.
+Sweep before you delete. **Do not** is the one part you already wrote down as what git history
+cannot recover, so read it and the evidence lines once more and sort each entry: a dead end that
+only makes sense against this goal dies with the file, but the command that finally reproduced the
+bug, the env quirk that cost an hour, and the approach that will look attractive again in a later
+session are facts about the repo. Their home is `CLAUDE.md`/`AGENTS.md` — the file every session
+already reads, so a line there takes you out of the loop entirely (**compound-v:context-engineering**
+owns what qualifies and how to keep it small). Promote in the same commit that deletes; a fact you
+meant to move afterwards is a fact you lost.
 
 ## Budget
 
@@ -69,4 +89,4 @@ tail silently stops existing. If your harness re-injects it at session start, th
 truncates too, which only sharpens the limit.
 
 This file is **run scaffolding, not a document**: it does not count against the one-new-document-per-change
-cap in `using-compound-v`, and it is deleted when the run ends.
+cap in `using-compound-v`, and it is removed only once the run is over and the human has said so.

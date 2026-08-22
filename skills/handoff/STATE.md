@@ -10,6 +10,9 @@
 1. <the single next action, concrete enough to start without re-deriving anything: file, function, command>
 2. <the one after that>
 
+## Suggested skills
+- <skill the next session should invoke first, and the one word why — or "none">
+
 ## Open decisions
 - <a judgment: the call you'd make, the one-line reason, "agree?" — or a thing only a person can hand over (a credential, access): name it exactly and what it unblocks — or "none">
 
