@@ -26,6 +26,15 @@ split is strict and it is what keeps both files honest — no narrative in the J
 the Markdown, and **Next** naming a row id rather than restating it. Two files that can disagree is
 the failure above; two files that *cannot* overlap is not.
 
+## Which repo
+
+`git -C <the files you are changing> rev-parse --show-toplevel`. The state file goes there — not
+in the working directory, which may be a folder that merely *contains* repos. A state file outside
+a git work tree describes no single project and is loaded by every session that opens that folder.
+
+If the run touches two repos, write two state files, each covering only its own repo and naming
+the other in one line. Never a shared one above them.
+
 ## If `.claude/STATE.md` already exists
 
 1. `git log --oneline -20` and `git status --porcelain`.
