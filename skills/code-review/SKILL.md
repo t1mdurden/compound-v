@@ -68,7 +68,7 @@ Severity is calibrated by **impact, not by label** — a "nit"/"style" tag doesn
 
 ## Output
 
-Two lists — surviving in-diff findings, then the **Adjacent (out-of-diff)** bucket under its own heading. Sort the two with one test: **would this still be broken if the diff were reverted?** No → the diff caused it, so it belongs in the main list at full severity and blocks the merge, whatever line number it sits on. Yes → it is pre-existing, so it goes in Adjacent, is reported once, and never blocks *this* change. Emit each finding's reasons *before* its number; a score written first is a score you will then argue backwards to justify, and the anchor survives evidence that should have moved it:
+Two lists — surviving in-diff findings, then the **Adjacent (out-of-diff)** bucket under its own heading. Sort the two with one test: **would this still be broken if the diff were reverted?** No → the diff caused it, so it belongs in the main list at full severity and blocks the merge, whatever line number it sits on. Yes → it is pre-existing, so it goes in Adjacent, is reported once, and never blocks *this* change. For a test failure the executable form of that test is a baseline run of the suite in a throwaway worktree at the base commit (see `compound-v:recheck` step 5): a failure that is present there is Adjacent, one that is absent there is in-diff. Emit each finding's reasons *before* its number; a score written first is a score you will then argue backwards to justify, and the anchor survives evidence that should have moved it:
 
 ```
 path/to/file.ext:line — issue: one sentence, what is wrong
