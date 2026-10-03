@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: Write a failing test before the implementation, watch it fail, then make it pass. Use when implementing a feature or fixing a bug, before writing implementation code, whenever you want the work to be verifiable — even on a quick change you'd normally just hand-write.
+description: Write a failing test before the implementation, watch it fail for the right reason, then make it pass. Use when implementing a feature or fixing a bug, before writing implementation code, when a regression must not come back, or when you realise you wrote the code first and want it genuinely covered. Verifying RED is its own step — a test written alongside the code proves nothing about whether it is bound to the code. Not for a typo, a rename, a config flip or a one-liner (the router's Trivial tier owns those: just do it and verify), and it does not introduce a test framework into a repo that has none — that is its own decision with its own review.
 ---
 
 # Test-Driven Development
@@ -47,7 +47,7 @@ digraph tdd {
 }
 ```
 
-**RED — one minimal test.** Name it for the behavior (`rejects_expired_token`, not `test1`). Test against **real code, not mocks** — see the anti-patterns below. The model writes the assertion for free; choosing *what* it should assert is the judgment that's now yours — a flawlessly-written test against the wrong spec is a worthless suite.
+**RED — one minimal test.** Name it for the behavior (`rejects_expired_token`, not `test1`). Test against **real code, not mocks** — see the anti-patterns below. The model writes the assertion for free; choosing *what* it should assert is the judgment that's now yours — a flawlessly-written test against the wrong spec is a worthless suite. Three tests pass the whole red-green ritual and bind to no behavior, and agents write them readily: a statically defined value asserted against a copy of its own literal, removed code asserted gone, and source or a prompt grepped for a phrase. Each goes red first and green after, then fails on every edit to that text, intended or not, and stays green when the code that uses it breaks — don't write them. Exact-content assertions stay right where code *computes* the output, and a removal whose absence is behavior (the route now 404s) is tested through that behavior.
 
 **Verify RED — run it, and read *why* it failed.** This is its own execution with no implementation written yet, not an inference: a red you were certain of but never ran is not evidence, and writing the test and the code in one pass and running once destroys the only proof that the test is bound to the code you wrote. A test that fails on an import error or a typo proved nothing either — it must fail because the behavior is genuinely missing. If it passes immediately, the test is wrong (or the behavior already exists) — fix that before writing any implementation.
 
@@ -64,9 +64,23 @@ def total(items, currency="USD", rounding="bankers", discount=None):
 
 **Verify GREEN.** Start with the narrowest test for the code you changed (fastest signal), then widen to the whole suite — confirm you didn't break something else. Read the output, not just the exit code: a suite can report 0 failures while emitting stderr noise, a deprecation warning, or an `act()`-style warning that flags a real problem. The bar is green *and* clean, not just green. *When* to widen depends on who's watching: with a user present and iterating, holding the full suite until they're ready is legitimate — a long run mid-conversation spends their turn. Running unattended, always run it; the alternative is reporting a green nobody ever saw.
 
+**Where the code is pure, widen the inputs, not just the suite.** A test that can fail still passes a wrong implementation its inputs never reach — a sorted-unique intersection that returned an unsorted set passed a hand-written suite — and an agent growing its own tests can narrow them without noticing: one diffed a numerical code against a reference implementation yet, for a stretch, only at a single parameter point. An oracle is only as strong as the inputs fed to it. So have the agent write an input generator — dozens to thousands of cases, the malformed ones and the whole declared range included — and check every output against a reference implementation, or against an invariant the spec states (sorted, unique, round-trips); an invariant the agent invented is a check it wrote for itself. The model writes the inputs, never the expected values; those would be tests-after at scale. Keep it to side-effect-free code or isolated effects — a sweep with a live mailbox in reach can empty it.
+
 **REFACTOR.** Now clean up (extract, rename, dedupe) with the green suite as your safety net. Behavior unchanged, tests stay green.
 
 **Dedupe the implementation, not the assertions.** The old rule — a thousand lines of test for a hundred lines of code is a design smell — was a *maintenance* rule: every change forced someone to hand-update those thousand lines. That cost now sits with the agent, and the engineer whose rule it was has since revised it: 100+ tests on a small library, no longer counted as over-testing. So a case you'd once have dropped as excessive is nearly free to keep, and kept cases accumulate into the thing that stops a new feature quietly breaking old behavior. Two limits keep it honest. They have to be good tests the agent can throw away later — a suite pinned to implementation details rather than behavior blocks the refactor instead of protecting it. And this is about the suite you accumulate, not one RED step: still one minimal failing test at a time.
+
+## Why RED is a separate step — the independent statement of it
+
+The reason to watch a test fail before making it pass is not ceremony, and the clearest statement of
+it comes from outside TDD entirely. Simon Willison, on trusting code at all: *"you should never trust
+any piece of code until you've seen it work with your own eye—or, even better, **seen it fail and
+then fixed it**."*
+
+That "even better" is the whole argument. A test you have only ever seen pass might be passing
+because the code works, or because it asserts nothing, or because it never ran. Those three are
+indistinguishable from green. Seeing it fail **for the reason you predicted** is what separates them,
+and it is the only step in the loop that cannot be reconstructed later.
 
 ## Real code, not mocks
 
@@ -97,3 +111,6 @@ Writing the reproduction first is also how you *understand* the bug. If you can'
 | "I wrote the code first, I'll just keep it." | Then you can't know the test actually tests it. Set the code aside, write the test, watch it fail, restore — and write that test from the requirement, not from the implementation you just read. A test reverse-engineered from code in front of you asserts what the code *does*, bugs included; that is the ratification failure again, and moving the file doesn't fix it while the code is still in your context. When it's load-bearing, let a fresh context write the test. |
 | Waiting for async work with a fixed delay (`setTimeout`, `sleep(500)`) | Flaky by construction — too short is a false red, too long crawls the suite. Wait on the *condition* (poll until the state holds, with a timeout cap), never a bare clock delay. |
 | "It still fails — I'll relax the assertion / narrow the goal." | A green you bought by weakening the test proves nothing and leaves the bug in place. Change the code, or change the test deliberately and say that's what you did. |
+
+| "The type error is noise — I'll cast it, `as any` it, or add an ignore comment." | The same reward hack as weakening an assertion, aimed at the other oracle: the checker still exits 0, so the green you report is bought rather than earned. And it is the one defect nobody re-checks — `compound-v:code-review` skips "anything a linter / type-checker / compiler / CI would catch" *because those run separately*, and a suppression is exactly what stops them running on that line. Before claiming green, grep the added lines for your stack's suppression tokens (`as any`, `@ts-ignore`, `# type: ignore`, `# noqa`, `eslint-disable`) and either fix the type or say which one you left and why. |
+

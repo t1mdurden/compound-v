@@ -1,0 +1,55 @@
+# Verified written sources — engineering blogs, conference proceedings, practitioner sites.
+# Columns: url <TAB> name <TAB> reach <TAB> what it is good for
+#
+# WHY WRITING RANKS ABOVE VIDEO. An essay is QUOTABLE and a talk mostly is not: YouTube captions
+# mishear proper nouns even on tracks YouTube labels "manual" (references/public-sources.md). So when
+# a claim has to survive into a plan or a review as a quote, prefer the written source — and several
+# of the people in references/practitioners.tsv publish the same idea in both places.
+#
+# THE REACH COLUMN IS MEASURED, NOT ASSUMED. `fetch` = a plain HTTP GET returns 200. `browser` = the
+# host bot-blocks a plain fetch (403/406) and needs a real browser — Netflix's blog, OpenAI's
+# research index and Uber's engineering blog all do. That distinction matters because a 403 read as
+# "nothing there" silently removes a source from consideration, which is the same failure as never
+# having listed it. Re-check with:
+#   curl -sL -o /dev/null -w "%{http_code}" -A "Mozilla/5.0" "<url>"
+#
+# HOW TO READ ONE: `WebFetch` for a known page; `WebSearch` to find the page when you lack the URL.
+# For a `browser` row, drive whatever browser-automation tool the environment provides. NEVER mint a
+# credential or automate a login to reach a source (compound-v:agent-security) — if the only way
+# through is someone's session and you do not have it, the honest output is "this channel is closed
+# in this run".
+#
+# THE BAR IS THE SAME ONE THE CHANNELS USE: the person who did the thing, in their own words,
+# non-obvious, and load-bearing. A corporate engineering blog carries both real mechanism and
+# recruiting content under one domain, so the row says which half to read for.
+#
+https://www.anthropic.com/engineering	Anthropic Engineering	fetch	Agent harness design, context engineering, effective agents. The primary source for most of what this kit encodes about agents.
+https://aws.amazon.com/builders-library/	AWS Builders' Library	fetch	The best free writing on distributed-systems mechanism anywhere: timeouts, retries, backoff, constant work, idempotency. Written by principal engineers who operate it.
+https://martinfowler.com/architecture/	Martin Fowler — Architecture	fetch	The canonical scoping of YAGNI, sacrificial architecture, and refactoring. Read for the distinctions, which are sharper than any restatement.
+https://www.usenix.org/conferences	USENIX (OSDI/NSDI/SREcon/ATC)	fetch	Peer-reviewed systems papers and SRE practice. Where a claim about production behaviour can actually be checked.
+https://www.infoq.com/presentations/	InfoQ Presentations	fetch	Architecture talks with written transcripts — quotable in a way YouTube captions are not.
+https://ai.engineer/	AI Engineer Conference	fetch	The conference behind the densest YouTube channel on this list; the site carries schedules and speaker material.
+https://research.google/blog/	Google Research	fetch	Frontier research write-ups. Read for mechanism, not product.
+https://blog.cloudflare.com/	Cloudflare Blog	fetch	Unusually candid postmortems and networking/edge mechanism. The outage write-ups are the valuable half.
+https://github.blog/engineering/	GitHub Engineering	fetch	Repo-scale engineering, Actions, Copilot internals.
+https://engineering.fb.com/	Meta Engineering	fetch	Infrastructure at scale. Skip the hiring posts.
+https://stripe.com/blog/engineering	Stripe Engineering	fetch	Money-movement correctness — idempotency, reconciliation, API versioning. This is where Stripe's real material is; their YouTube channel is brand content.
+https://vercel.com/blog	Vercel Blog	fetch	Next.js/React and AI SDK engineering from the maintainers.
+https://blog.trailofbits.com/	Trail of Bits	fetch	Security research with working exploits. The bar for what a real vulnerability write-up looks like.
+https://www.humanlayer.dev/blog	HumanLayer	fetch	Harness engineering for coding agents, including public reversals of their own earlier advice — rare and valuable.
+https://newsletter.pragmaticengineer.com/	The Pragmatic Engineer	fetch	Long-form interviews with engineers at named companies. Some posts paywalled.
+https://simonwillison.net/	Simon Willison	fetch	The most consistent running commentary on LLM tooling, with working code and honest negative results.
+https://lethain.com/	Will Larson	fetch	Engineering leadership and architecture decisions from a repeat CTO. Strong on how a decision gets made, not just what it was.
+https://danluu.com/	Dan Luu	fetch	Measured, contrarian systems writing. Frequently the only source that checked a widely-repeated claim.
+https://brandur.org/articles	Brandur Leach	fetch	Idempotency keys, job queues, Postgres patterns — implementation-level and unusually precise.
+https://ferd.ca/	Fred Hébert	fetch	Resilience engineering and incident analysis; the strongest writing on why systems fail as systems.
+https://jvns.ca/	Julia Evans	fetch	Debugging and systems fundamentals explained from first principles. Best source for "how do I actually inspect this".
+https://netflixtechblog.com/	Netflix Tech Blog	browser	Large-scale streaming and platform engineering. Medium bot-blocks a plain fetch (403).
+https://openai.com/research/	OpenAI Research	browser	Model and agent research index. Bot-blocks a plain fetch (403).
+https://www.uber.com/en-US/blog/engineering/	Uber Engineering	browser	Distributed systems and data infrastructure at scale. Bot-blocks a plain fetch (406).
+https://www.dwarkesh.com/	Dwarkesh Podcast — written transcripts	fetch	Full written transcripts of the interviews registered in channels.tsv (DwarkeshPatel), plain-fetchable at /p/<slug>: a curl of /p/andrej-karpathy returns ~154k chars with "march of nines" verbatim and proper nouns intact ("Claude Code" x3, "Cloud Code" x0 — the test that demoted captions). This is the quotable form of a talk that is otherwise ASR. Slug is the guest name (/p/john-schulman, /p/jeff-dean-and-noam-shazeer, /p/sholto-trenton-2); /sitemap.xml lists every slug. Fetch serially — eight parallel requests returned 17-char rate-limit bodies that read as empty pages. 2021-era episodes (/p/uncle-bob) have no transcript body.
+https://hamel.dev/	Hamel Husain (with Shreya Shankar)	fetch	The eval methodology most AI teams now run, in its authors' words: error analysis before metrics, judge context scoping, trace sampling, reviewing a trace too large for a person. The AI Evals FAQ (/blog/posts/evals-faq/) answers the specific question. 14 sources.md rows cite the site. They sell a course; read the posts and the FAQ, not the course pages.
+https://lucumr.pocoo.org/	Armin Ronacher	fetch	First-person agent-design writing from Flask's creator, now building agents at Earendil: what breaks in harnesses, why a sub-LLM inside a tool backfires, a cache-friendly prompt shape, iteration isolated in throwaway sub-agents. 5 sources.md rows cite it. His company's engineering posts are at earendil.com — same orbit.
+https://cognition.com/blog	Cognition (Devin) — engineering and research	fetch	cognition.ai/blog redirects here; 23 sources.md rows cite it. Read the bylined engineering and research posts — Walden Yan on multi-agents and its later revision, Ido Pesok on verifying agentic development, SWE-grep, FrontierCode's move from pass/fail to mergeability grading, the Devin annual performance review — and skip the launches. A company measuring its own agent is mechanism, never measurement.
+https://cursor.com/blog	Cursor — engineering and research	fetch	Bylined engineering posts from a team operating a high-usage agent: harness iteration across model releases, a semantic-search A/B, dynamic context discovery, agent-swarm economics, reward hacking swamping benchmark gains (Wilson Lin, Stefan Heule, Jediah Katz, Naman Jain). Mixed with Composer and product launches; vendor figures are mechanism, never measurement.
+https://www.dbreunig.com/	Drew Breunig	fetch	Context failure modes ('How Contexts Fail'), prompt debt, keeping spec, tests and code in sync — with his own reversals ('I got this wrong') and small tools that test the claims. Several posts relay papers or system cards; follow those to the primary before citing. DSPy/cmpnd commercial orbit, shared with lateinteraction.

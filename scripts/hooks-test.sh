@@ -30,7 +30,8 @@ run() {
   local in out got
   in="$(jq -n --arg t "$tpath" --arg c "$root" "$@" \
         '{hook_event_name: "Stop", session_id: "test", transcript_path: $t, cwd: $c,
-          stop_hook_active: ($ARGS.named.active // false)}')"
+          stop_hook_active: ($ARGS.named.active // false),
+          last_assistant_message: ($ARGS.named.final // null)}')"
   out="$(printf '%s' "$in" | bash "$hook" 2>/dev/null)"; local rc=$?
   got="ALLOW"
   [ "$(printf '%s' "$out" | jq -r 'try .decision catch ""' 2>/dev/null)" = "block" ] && got="BLOCK"
@@ -59,9 +60,40 @@ run "bash in a PREVIOUS turn only"          BLOCK "$fx/block-bash-in-previous-tu
 # Convergence. The same blocking transcript must pass once the harness says it already
 # blocked — this is what caps the gate at one block per turn so a session can always end.
 run "stop_hook_active on a blocking turn"   ALLOW "$fx/block-claim-no-command.jsonl" --argjson active true
+# The gate reads only `tail -n 500`, and fails OPEN when the turn boundary falls outside that
+# window — a documented choice, not a bug ("if the turn boundary isn't inside the window we fail
+# open instead of guessing at a narrower turn"). Every other fixture here is 4-8 lines, so nothing
+# exercised the edge. This pins it: the same blocking turn, buried under 519 lines of chatter, is
+# allowed. If a future edit changes the window or the fail direction, this case moves and says so.
+run "turn start outside the 500-line window"  ALLOW "$fx/allow-turn-start-outside-tail-window.jsonl"
+
+# The transcript is written asynchronously and may not yet hold the turn's final message at Stop
+# time (hooks reference); the harness hands over the real final text as last_assistant_message.
+# Each fixture's flushed tail says the opposite of the real final message, so the gate must judge
+# the real one — in both directions.
+run "final claim not yet in the transcript"   BLOCK "$fx/allow-no-claim.jsonl" --arg final "Done — added the retry wrapper."
+run "final message is not the flushed claim"  ALLOW "$fx/block-claim-no-command.jsonl" --arg final "Added the wrapper; still working on the retry path."
 
 # Everything the gate must NOT block.
 run "a command actually ran"                ALLOW "$fx/allow-command-ran.jsonl"
+# A prose-only turn has no command that could observe the change, so demanding one is a false
+# block on the commonest Trivial-tier task. The mixed case is the guard on that guard: one code
+# file among the docs and the gate must still fire, or "touch a README too" becomes the bypass.
+run "docs-only edit + claim"                ALLOW "$fx/allow-docs-only.jsonl"
+run "docs AND code edited + claim"          BLOCK "$fx/block-mixed-docs-and-code.jsonl"
+# `echo ok` cleared this gate for its whole life — the forgeable-attestation class, committed by
+# the gate itself. The two ALLOW rows are the guard on the fix: a real suite must still pass, and
+# `ls` is a LEGITIMATE check for "was the file written", so the block list stays at the three
+# commands that can never observe anything.
+run "contentless command (echo ok)"        BLOCK "$fx/block-contentless-command.jsonl"
+# Four forms that ALL satisfied this gate until the filter was fixed: `\b` after `:` requires an
+# adjacent word character that never exists, and a trailing separator defeated the `[^&|;]*$` tail.
+run "contentless bare colon"              BLOCK "$fx/block-contentless-colon.jsonl"
+run "contentless echo, trailing ;"        BLOCK "$fx/block-contentless-trailing-semicolon.jsonl"
+run "contentless true, trailing ;"        BLOCK "$fx/block-contentless-true-semicolon.jsonl"
+run "contentless echo, backgrounded"      BLOCK "$fx/block-contentless-background.jsonl"
+run "a real test command"                  ALLOW "$fx/allow-real-command.jsonl"
+run "ls as a genuine existence check"      ALLOW "$fx/allow-ls-is-a-real-check.jsonl"
 run "\"still working on it\""               ALLOW "$fx/allow-still-working.jsonl"
 run "russian \"not working yet\""            ALLOW "$fx/allow-ru-negation.jsonl"
 run "suite, then a trailing edit"           ALLOW "$fx/allow-suite-then-trailing-edit.jsonl"
@@ -231,6 +263,28 @@ out="$(printf '{"hook_event_name":"Stop","cwd":"%s","stop_hook_active":false}' "
 if [ -z "$out" ]; then pass=$((pass + 1)); printf '%-46s %-8s ok\n' "kill switch (env)" "ALLOW"
 else miss=$((miss + 1)); failures+=("COMPOUND_V_LEDGER_GATE=off did not disable the gate")
      printf '%-46s %-8s MISS\n' "kill switch (env)" "ALLOW"; fi
+
+
+# Paused is not stopped: a subagent still in flight wakes the session when it lands, so the gate
+# abstains, as /goal does. A backgrounded shell must NOT disarm it: a dev server or a log tail
+# never lands, so abstaining on one would disarm the gate for the rest of the run.
+printf '%s' "$OPEN" > "$lg_dir/.claude/slices.json"
+bt() { # bt <name> <expect: BLOCK|ALLOW> <background task type>
+  local out d
+  out="$(jq -nc --arg c "$lg_dir" --arg ty "$3" \
+         '{hook_event_name:"Stop",cwd:$c,stop_hook_active:false,
+           background_tasks:[{id:"t1",type:$ty,status:"running",description:"x"}]}' \
+         | bash hooks/stop-ledger 2>/dev/null)"
+  d="$(printf '%s' "$out" | jq -r 'try .decision catch ""' 2>/dev/null)"
+  if { [ "$2" = BLOCK ] && [ "$d" = block ]; } || { [ "$2" = ALLOW ] && [ "$d" != block ]; }; then
+    pass=$((pass + 1)); printf '%-46s %-8s ok\n' "$1" "$2"
+  else
+    miss=$((miss + 1)); failures+=("$1 — expected $2, got decision $d")
+    printf '%-46s %-8s MISS\n' "$1" "$2"
+  fi
+}
+bt "open rows, a subagent still in flight"     ALLOW subagent
+bt "open rows, only a dev server in flight"    BLOCK shell
 
 # --- ledger.sh: exit codes AND the line it prints, which nothing used to assert ---------------
 led() { # led <name> <expect-exit> <ledger-json> [substring-that-must-appear]

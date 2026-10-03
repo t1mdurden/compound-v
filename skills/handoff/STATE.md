@@ -2,6 +2,7 @@
 
 ## Goal
 <one sentence: what "done" looks like, as observable behavior. This is the stop condition for the whole run.>
+- <YYYY-MM-DD> user: "<a mid-run steer, in their exact words>" — <"adds", or the part it replaces. A replacement also rewrites the sentence above, which stays the stop condition; this line is the record of who changed it.>
 
 ## Done
 - <thing that works> — evidence: `<command>` exit 0, "<the proving output line>"

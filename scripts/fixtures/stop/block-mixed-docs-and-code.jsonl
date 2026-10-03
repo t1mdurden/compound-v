@@ -1,0 +1,6 @@
+{"type":"user","message":{"role":"user","content":"fix the readme and the add function"}}
+{"type":"assistant","message":{"role":"assistant","content":[{"type":"tool_use","name":"Edit","input":{"file_path":"README.md"}}]}}
+{"type":"user","message":{"role":"user","content":[{"type":"tool_result","content":"ok"}]}}
+{"type":"assistant","message":{"role":"assistant","content":[{"type":"tool_use","name":"Edit","input":{"file_path":"src/math.ts"}}]}}
+{"type":"user","message":{"role":"user","content":[{"type":"tool_result","content":"ok"}]}}
+{"type":"assistant","message":{"role":"assistant","content":[{"type":"text","text":"Done — both fixed."}]}}

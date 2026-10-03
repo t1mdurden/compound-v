@@ -1,0 +1,85 @@
+# Top practitioners — the people whose first-person accounts clear the source bar.
+# Columns: x-handle <TAB> who they are <TAB> what they shipped/operate
+#
+# HOW TO REACH THEM, cheapest first:
+#   1. Their WRITING. Most of these people publish essays; an essay is quotable and an X post
+#      often is not. WebSearch "<name> <topic>", or WebFetch their site directly.
+#   2. Their TALKS. `bash scripts/yt.sh mine "<topic>"` sweeps the verified channels in
+#      references/channels.tsv, several of which are where these people speak. Captions are
+#      SUBSTANCE, never quotation (references/public-sources.md).
+#   3. Their CODE. Several maintain repos in references/exemplars.tsv — `scripts/exemplar.sh`
+#      reads it at a pinned version, which beats any description of what they believe.
+#   4. Their POSTS. `WebSearch` constrained to x.com returns real post URLs plus a digest — and the
+#      digest is a PARAPHRASE, useless as a quotation. A plain fetch of a post URL will hit an
+#      authorization wall; that is the wall, not a bug. NEVER mint a credential or automate a login
+#      to get past it (compound-v:agent-security). Where an X read API is configured, it returns
+#      full verbatim text; without one, stop at the digest and mark the claim unverified.
+#
+# THE ROSTER IS ONE CALIBER OF PERSON: founders and CTOs who shipped AND operated the thing,
+# founding engineers, AI engineers at frontier labs, and working developers at top-tier companies.
+# That is the ONLY qualification. A title at a famous company is not one, and neither is an audience.
+#
+# NEVER RANK BY FOLLOWER COUNT — measured, twice. The single account behind a canonical
+# architectural finding returned ZERO posts clearing a likes filter, while a million-follower
+# account returned 75%, nearly all release news. A metric filter drops the best practitioner and
+# keeps the noise. Use engagement only to make a broad query tractable, and say when you did.
+#
+# SEED THE PERSON, NOT THE ORG. Widening a roster with lab/vendor/company accounts pulls in
+# vendor-blog posts, funding coverage and event pages — the "marketing dressed as education" class.
+# A CTO writing in the first person about what broke is the channel working; the company account
+# announcing a partnership is the noise it filters worst, because it carries the most engagement.
+#
+# EVERY HANDLE BELOW WAS VERIFIED BY READING BACK THE ACCOUNT and matching it to the person named
+# in a corpus source. Six candidates were DROPPED rather than guessed, and the reason is instructive:
+# `carlini` resolves to a Brazilian account with 367 followers, not the security researcher. A
+# guessed handle silently harvests a stranger and every finding downstream inherits it. Re-verify a
+# row before quoting it; people rename and delete accounts.
+#
+bcherny	Boris Cherny — creator of Claude Code, Anthropic	Claude Code itself; auto mode, /goal + /loop, the long-running-autonomy playbook
+_catwu	Cat Wu — Head of Product, Claude Code & Cowork, Anthropic	Claude Code product surface; Cowork
+trq212	Thariq Shihipar — Claude Code, Anthropic	Claude Agent SDK; context-engineering and harness work inside Claude Code
+delba_oliveira	Delba Oliveira — Claude Code DevRel, Anthropic (ex-Vercel/Next.js)	Claude Code auto-mode docs and feedback-loop guidance; previously Next.js docs
+RLanceMartin	Lance Martin — MTS, Anthropic (ex-LangChain)	Agent harness design: brain/hands session split, cost-effective harnesses
+alexalbert__	Alex Albert — Research/DevRel, Anthropic	Model-capability guidance for agentic coding; tau2-bench writeups
+ErikSchluntz	Erik Schluntz — Anthropic (ex-co-founder/CTO, Cobalt Robotics)	Co-author of 'Building Effective Agents', the canonical workflow-vs-agent taxonomy
+amanrsanger	Aman Sanger — co-founder, Cursor (Anysphere)	Cursor; the speculative-edits 'instant apply' system at ~1000 tok/s
+mntruell	Michael Truell — co-founder & CEO, Cursor (Anysphere)	Cursor and Composer — the highest-usage agentic coding product outside the labs
+walden_yan	Walden Yan — co-founder, Cognition (Devin)	Devin; the 'Don't Build Multi-Agents' context-engineering position and its later revision
+russelljkaplan	Russell Kaplan — President, Cognition; ex-Director of Eng, Scale AI; ex-Tesla Autopilot	Devin/Windsurf operation at scale
+thorstenball	Thorsten Ball — Amp / Sourcegraph; author of 'Writing an Interpreter in Go'	Amp coding agent; the 300-line 'How to Build an Agent' teardown
+dexhorthy	Dex Horthy — founder, HumanLayer; author of 12-Factor Agents	12-Factor Agents; HumanLayer; the 'software factories' benchmarking work
+GeoffreyHuntley	Geoffrey Huntley — independent engineer, agent-loop practitioner	The 'Ralph Wiggum' brute-force agent loop; long-running unattended coding-agent technique
+mitsuhiko	Armin Ronacher — founder, Earendil; creator of Flask/Jinja; ex-Sentry (a decade)	Flask, Jinja2, Rye/uv-adjacent tooling; first-person writeups of what breaks in agent design; Earendil's agent-legible-codebase practice (talk _Zcw_sVF6hU). Same commercial orbit as badlogicgames
+addyosmani	Addy Osmani — Director, Google Cloud AI (prev. Chrome DevRel lead)	Chrome tooling/Lighthouse era work; publishes his own measured LLM coding workflow
+charlespacker	Charles Packer — co-founder & CEO, Letta (MemGPT)	MemGPT/Letta; Letta Code agents that rewrite their own harness
+sarahwooders	Sarah Wooders — co-founder & CTO, Letta	Letta memory/context-hierarchy runtime; Letta Code
+peakji	Yichao 'Peak' Ji — co-founder & Chief Scientist, Manus	Manus general agent; production context-engineering (KV-cache, file-as-context)
+pirroh	Michele Catasta — President & Head of AI, Replit	Replit Agent; continual-learning-for-agents work
+amasad	Amjad Masad — founder & CEO, Replit	Replit and Replit Agent — an agent operated at consumer scale
+hwchase17	Harrison Chase — co-founder & CEO, LangChain/LangSmith	LangChain, LangGraph, DeepAgents; LangSmith eval + harness tooling
+gregpr07	Gregor Zunic — co-founder, browser-use	browser-use, the most-used open browser-agent library; 'Bitter Lesson of Agent Frameworks'
+pk_iv	Paul Klein IV — founder & CEO, Browserbase	Browserbase + Stagehand — headless browser infrastructure agents actually run on
+mitchellh	Mitchell Hashimoto — creator of Ghostty; founder of HashiCorp (Vagrant, Terraform, Vault)	Terraform/Vagrant/Vault; Ghostty; publishes measured agent-throughput experience
+antirez	Salvatore Sanfilippo — creator of Redis	Redis; currently shipping LLM-facing data structures inside it and testing coding CLIs on real C
+cramforce	Malte Ubl — CTO, Vercel	Vercel platform; AMP at Google; private cyber-evals and model-routing in production
+rauchg	Guillermo Rauch — founder & CEO, Vercel; creator of Socket.IO and Next.js's home	Next.js/Vercel; v0; the AI-cloud thesis and DESIGN.md-style agent conventions
+karrisaarinen	Karri Saarinen — co-founder & CEO, Linear	Linear, including harness/model-choice inside Linear's own agent surface
+lethain	Will Larson — CTO, Imprint (since 2025-06); prev. CTO Carta, Calm; Stripe, Uber; author of An Elegant Puzzle	Multiple engineering orgs and platforms; writes strategy from operated systems. His 2025-26 internal-agent and software-factory posts come from Imprint
+HamelHusain	Hamel Husain — applied-LLM consultant; ex-GitHub ML, ex-Airbnb	The eval methodology most AI-engineering teams now use; CodeSearchNet at GitHub
+sh_reya	Shreya Shankar — LLM-systems researcher (Berkeley → CMU); creator of DocETL	DocETL; data flywheels and agent action-space partitioning for production LLM pipelines
+eugeneyan	Eugene Yan — Member of Technical Staff, Anthropic (2026–); prev. Principal Applied Scientist, Amazon	Production recsys/LLM systems at Amazon; task-specific eval guidance; now Anthropic's LLM vulnerability-pipeline work with security teams (claude.com/blog/using-llms-to-secure-source-code). Anthropic-orbit from 2026
+jxnlco	Jason Liu — Developer Experience Engineer, Codex team, OpenAI; creator of `instructor`; prev. applied-AI/RAG consultant	instructor (structured outputs); systematic RAG-improvement methodology. OpenAI-orbit now — his Codex workflow material is an employee's
+ankrgyl	Ankur Goyal — founder & CEO, Braintrust; ex-founder Impira, ex-MemSQL eng lead	Braintrust — the eval/observability stack many agent teams run on
+chipro	Chip Huyen — author of 'AI Engineering' and 'Designing ML Systems'; ex-founder Claypot AI, ex-NVIDIA	Production ML platforms; the reference text for AI engineering; currently testing agent-skill practice publicly
+lateinteraction	Omar Khattab — asst. professor MIT CSAIL; creator of ColBERT, DSPy, GEPA	DSPy and GEPA — programmatic prompt/harness optimization used in production
+philipkiely	Philip Kiely — author of 'Inference Engineering'; Baseten (early)	Day-0 model APIs at Baseten; inference-engineering practice
+danielhanchen	Daniel Han — co-founder, Unsloth (YC S24); ex-NVIDIA ML	Unsloth; the reference bug-hunts that fix broken open-weight model releases
+yoobinray	Raymond Yoo — engineering @ Melius; ex-MLE, Amazon	Realtime LLM inference infra, large-scale migrations, ML system design writeups
+simonw	Simon Willison — creator of Datasette and the `llm` CLI; co-creator of Django	Datasette, `llm`, sqlite-utils; the most consistently grounded running log of LLM tool behaviour
+swyx	Shawn 'swyx' Wang — Latent Space; smol.ai; Cognition	Coined/organized 'AI Engineer'; runs the AI Engineer conference; ships smol tools
+_philschmid	Philipp Schmid — Agents & Gemini API, MTS, Google DeepMind (ex-Hugging Face)	Gemini agent APIs; subagent-pattern and persistent-vs-stateless-bash writeups
+karpathy	Andrej Karpathy — Anthropic (joined 2026-05-19, by his own post); ex-Director of AI, Tesla; founding member, OpenAI	nanoGPT, micrograd, llm.c, nanochat; Tesla Autopilot vision stack. Posts after 2026-05-19 about Claude, Anthropic models or Claude Code come from an employee — weight them as one commercial source
+rasbt	Sebastian Raschka — author of 'Build a Large Language Model (From Scratch)'; ex-Lightning AI	LLMs-from-scratch; reasoning-model and architecture breakdowns used as reference
+thsottiaux	Thibault 'Tibo' Sottiaux — Codex, OpenAI (bio: 'Codex & ChatGPT @OpenAI')	The Codex agent (CLI, app, cloud); first-person operator postmortems with numbers — usage-regression root causes, destructive-action fixes, a background memory worker that inherited Stop hooks and checked 15,000 times whether it could stop. Author of 'Scaffolding is coping not scaling', which sources.md cites. Skip the launch and rate-limit posts
+badlogicgames	Mario Zechner — creator of the pi coding agent and libGDX; Earendil	pi (four tools, a few-line prompt, self-extending through TypeScript extensions; repo now earendil-works/pi); first-person harness-design writing at mariozechner.at. Same commercial orbit as mitsuhiko — count them as one source
+sqs	Quinn Slack — CEO & member of technical staff, Amp; co-founder, Sourcegraph	Sourcegraph code search and Cody, then the Amp coding agent; posts operating decisions — an oracle subagent in place of max reasoning effort, publicly declining to build a cost-optimizing model router (sources.md cites it). Same commercial orbit as thorstenball; ~3 of ~130 posts read were load-bearing, the rest product promotion

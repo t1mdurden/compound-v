@@ -72,3 +72,79 @@ here is what i want: full context on all our projects, the metrics, automatic fo
 ok start building the whole thing tonight, i am going to bed, i want something real by morning	get-shit-done,handoff
 we have been at this for six hours, tests are green, is any of this actually real	get-shit-done
 add a --json flag to the export command	NONE
+#
+# get-shit-done's four stage skills (split out 2026-09-21). The entry skill still owns the project
+# trigger; these rows measure the CHAIN — that a run reaching or resuming at a stage invokes that
+# stage's skill, not just the entry. Prompts name the stage's situation, never the skill.
+before anyone writes code, break this brief into the pieces a user would actually touch and tell me which one we should prove first	get-shit-done-1-carve
+here's the founder brief for the client portal. i want the whole thing, not a demo — start by working out what the parts are	get-shit-done-1-carve
+we're doing the full build. write down every function the brief asks for, each one starting out failing, before we touch the code	get-shit-done-1-carve
+the parts are agreed. for each one, find what has actually shipped for it and what it cost the people who shipped it	get-shit-done-2-recon
+slices are written down, resume the run. research is next — keep it to one question per slice	get-shit-done-2-recon
+before we build slice two, what's the known arrangement for the webhook retry part and what bites people later	get-shit-done-2-recon
+the slices and the research are approved, start building the first one end to end	get-shit-done-3-build
+slice one landed and merged, keep going with the next slice	get-shit-done-3-build
+third patch on the same importer design and slice three still fails its check. keep patching or swap it out	get-shit-done-3-build,systematic-debugging
+every slice has landed. walk the whole product and give me one word on whether it's done	get-shit-done-4-reckon
+all the rows are green and the branch is merged — hold it to the bar before we call the project finished	get-shit-done-4-reckon
+the overnight build finished. before i show the client tomorrow, is it real, and what's the one thing still missing	get-shit-done-4-reckon,get-shit-done
+i keep going back and forth on whether to use postgres or sqlite here and i cant settle it	council
+nobody can agree on this and theres no test that would tell us who's right	council
+get me a few independent reads on this decision before i commit to it	council
+the auth on this endpoint feels wrong but i cant say why	agent-security
+im about to let this thing read github issues and then run whatever it decides	agent-security
+we have three agents writing to the same run table and the counts are drifting	ai-system-reliability
+sometimes the webhook fires twice and we send two emails	ai-system-reliability
+should the retrieval live in the model call or as its own service	architecting-ai-systems
+we keep bolting more guardrails on and it keeps getting slower	architecting-ai-systems
+work through the tasks in the plan doc	batched-implementation
+pick this back up, i think we stopped around task four	batched-implementation
+i want users to be able to share a project with a read-only link	brainstorming
+add a thing where people can invite teammates	brainstorming
+this session has gotten really slow and it keeps forgetting what we decided	context-engineering
+should i put all the schema docs in the system prompt or let it look them up	context-engineering
+are you sure thats the reason	critical-thinking
+that seems obviously right, but check me	critical-thinking
+should this be one agent with tools or a fixed pipeline	designing-agents
+the model keeps calling the wrong tool with the wrong arguments	designing-agents
+can you split this across a few workers to go faster	dispatching-parallel-agents
+run these four migrations at the same time in separate checkouts	dispatching-parallel-agents
+is the summarizer any good	evals
+how do i know if changing the prompt made it better or worse	evals
+i inherited this service and nobody knows what it promises	extracting-specs
+before i touch this module, what are callers actually relying on	extracting-specs
+ok ship it	finishing
+open the pr and clean up the branch	finishing
+nobody is signing up and i dont know why	founder-distribution
+we built the whole thing, how do we get the first hundred users	founder-distribution
+what would count as this working	frame-the-goal
+define done for me here	frame-the-goal
+where did we leave off	handoff
+im going to bed, write down where we are	handoff
+this charges a card so it cannot double fire	make-it-stable
+it works most of the time and fails weirdly under load	make-it-stable
+this screen feels off but i dont know what to change	product-taste
+does this look generic	product-taste
+check what the agent just did	recheck
+is that batch actually correct	recheck
+whats the right way to do retries with this client	searching-patterns
+im using their sdk and im not sure this is the current api	searching-patterns
+do we even need a model for this	simplest-thing-that-works
+whats the least complicated thing that would work here	simplest-thing-that-works
+should we build this at all	startup-taste
+map out the roadmap for the next quarter	startup-taste
+this test passes sometimes and fails other times	systematic-debugging
+ci is red but it works on my machine	systematic-debugging
+write this so its actually covered	test-driven-development
+add the parser, and i want a test that would have caught the old bug	test-driven-development
+what should i be doing first here	using-compound-v
+heres a big messy request, where do we start	using-compound-v
+did that actually work	verification-before-completion
+you said it was done, prove it	verification-before-completion
+turn this design into something an agent can build	writing-plans
+break this into tasks with real file paths	writing-plans
+whats the one doc a new person should read to understand this product	writing-prd
+we keep re-explaining the same context every session	writing-prd
+im about to build the notifications feature, what do i need to know first	gathering-context
+before we write this, what are the patterns and gotchas for this stack	gathering-context
+were adding stripe subscriptions and ive never done billing before	gathering-context

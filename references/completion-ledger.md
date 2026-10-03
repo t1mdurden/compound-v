@@ -71,8 +71,18 @@ on the dashboard".
 {"id": "s2-f07",
  "does": "a signed-out visitor who submits a valid login lands on the dashboard showing their name",
  "status": "todo",
- "evidence": null}
+ "evidence": null,
+ "attempts": [{"what": "raised the gateway timeout to 60s", "result": "still timed out on the 4GB account"}]}
 ```
+
+**`attempts` is where a failed try lives before a row is `blocked`, and it is what both three-strike
+caps count.** Append at any status; never overwrite. Without it a row with two failed attempts is
+still `todo` and reads as untouched, so the next session inherits it and reaches for the approach
+that already failed — which is the precise failure the ledger exists to defeat, since *"compaction
+isn't sufficient"* to carry that history in context. It is also the evidence a `blocked` row owes
+(the attempt count, the named blocker, the evidence per attempt) and the input to
+**compound-v:get-shit-done-3-build**'s repair-or-replace call, whose trigger is the third patch onto one
+shape. Appending to it is a legal write; editing an earlier entry is not.
 
 **`does` is a witness case, not a title.** One concrete situation with an input and an observable outcome, so a person who was not there can attempt it and disagree with the result. *"auth works"* is not a row; *"a signed-out visitor who submits a valid login lands on the dashboard showing their name"* is. A separate `steps` array was specified here for one revision and cut: in the only real run this has had, it was filled on 0 of 19 rows and read by no code, while `does` plus `evidence` carried the whole thing. One field that gets written beats two where the second is a rule nobody enforces.
 
@@ -179,6 +189,17 @@ declared 41 · discovered +7 · dropped −3 (named) · passed 45 · blocked 0 �
 A third party can see the denominator moved and why. A run whose denominator only ever shrinks is
 one to distrust.
 
+**Report the delta; never report a saving.** The line above counts things that exist — rows declared,
+discovered, dropped by name, passed. A saving does not: *"this approach saved ~400 lines"* or *"cut
+two days of work"* subtracts from a version that was never built, so there is no baseline anywhere in
+the world and the figure is manufactured by the sentence printing it. The pull is strongest exactly
+at the verdict, where a counted artifact feels thinner than an impressive number, and the only
+durable answer is to have the counted artifact already in hand — this delta line, the per-capability
+report above it, the marker harvest below — and to say the counterfactual was not measured. It is
+*compute coverage, never assert it* applied to the one number that cannot be computed at all: **if
+you cannot name what the figure is subtracted from, do not print it.**
+
+
 ## R4 — Blocked is not success, and not a resting place
 
 A row that has failed its check three times becomes
@@ -190,6 +211,26 @@ This rule is not bookkeeping. A two-state ledger makes a genuinely impossible ro
 an untouched one, so triage is impossible; and an agent facing an unpassable row under a keep-going
 instruction has one move left, which is to rationalise a flip. Give the run a legal way to say *this
 one did not work and here is why* and it stops needing an illegal one.
+
+## The shortcut inside a passed row — mark it where a grep can find it
+
+**A row can pass on an implementation that cut a real corner, and this ledger has no slot for that.**
+`dropped` covers a requirement you cut; `delete` covers work recon removed before anyone built it.
+Neither covers the global lock or the naive heuristic you shipped *on purpose* inside a row that is
+green and staying green.
+
+So mark it in the code at the moment you cut it, in a form a grep can harvest: a comment carrying
+the fixed token `ceiling:`, the limit, and the condition that would end it — written as
+`ceiling: global lock, per-account locks if throughput matters` behind your language's comment
+marker. `scripts/check.sh` harvests them and counts two scalars: markers, and markers naming no
+condition. The token is not `deferred:` because **compound-v:writing-plans** already owns
+`Deferred:` for work deliberately *not built*, and the two meanings must not share a grep.
+
+**The trap, and it is the reason to report the counts rather than act on them.** A searchable debt
+ledger makes deferring cheap and *legitimate*, so markers accumulate faster than anyone retires
+them, and a repo can carry a clean-looking ledger of triggered deferrals not one of which has ever
+fired. Whether a stated trigger is ever noticed when its condition arrives is measured by nobody,
+here or in the source this is taken from. Report the two scalars; never report them as health.
 
 ## Integrity — the agent must not be able to edit what grades it
 
@@ -262,3 +303,7 @@ belongs to, you are writing tasks, not rows, and the ledger has started measurin
 | The completion number appears in prose but no command prints it | Asserted, not computed. Anyone re-running it should get the same number. |
 | The same diff touches a row's steps and its implementation | The grader moved. Freeze the steps or get a human to review the change. |
 | Everything is `passed`, nothing was ever `blocked` | On a real build, suspect the flip rule rather than celebrating. |
+
+| A shortcut is described in the summary or the handoff, but not marked in the code | Prose does not survive a grep or a new session. The ceiling and the trigger belong on the line that cut the corner; anywhere else and the deferral is permanent by default, which nobody chose. |
+| The report names a saving — lines avoided, days saved, work not done | A version that was never built has no line count. Print the delta, the per-capability table and the marker harvest; say the counterfactual was unmeasured. |
+

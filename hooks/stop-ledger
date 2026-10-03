@@ -50,6 +50,19 @@ command -v jq >/dev/null 2>&1 || exit 0
 # Already blocked once this turn — let the turn end.
 [ "$(printf '%s' "$input" | jq -r 'try (.stop_hook_active // false) catch false' 2>/dev/null)" = "true" ] && exit 0
 
+# PAUSED IS NOT STOPPED. With fork mode on — the default in an interactive session — every
+# subagent runs in the background, so the orchestrator's turn ends while a worker is still on a
+# row, and the harness wakes the session when it lands. The Stop input's `background_tasks`
+# exists to tell "done" from "paused waiting on background work"; blocking here sends the
+# orchestrator to close the row a worker holds right now. Abstaining only defers: the next turn
+# that ends with nothing in flight meets the gate. Count only work that finishes on its own — a
+# subagent or a workflow. A backgrounded dev server or log tail never lands, and an agent-team
+# teammate reports `running` for the whole session, so counting either would disarm the gate for
+# the rest of the run.
+inflight="$(printf '%s' "$input" | jq -r 'try ([.background_tasks[]? | select(.type == "subagent" or .type == "workflow")] | length) catch 0' 2>/dev/null)"
+case "$inflight" in ''|*[!0-9]*) inflight=0 ;; esac
+[ "$inflight" -gt 0 ] && exit 0
+
 cwd="$(printf '%s' "$input" | jq -r 'try (.cwd // "") catch ""' 2>/dev/null)"
 [ -n "$cwd" ] && [ -d "$cwd" ] || cwd="$PWD"
 ledger="$cwd/.claude/slices.json"

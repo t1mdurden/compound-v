@@ -6,8 +6,21 @@ node_modules/
 /tmp/
 *.tmp
 
-# Internal research scaffolding & corpora — NEVER publish or vendor into this repo.
-# These are discovery inputs only; shipped skills cite public primary sources.
+# Local scaffolding and private corpora — never publish or vendor into this repo.
+# These names are ALREADY public in this repo's history (.gitignore and scripts/check.sh on main),
+# so withholding them here protects nothing and removing them only deletes a working guard.
+# Add your own private directories here AND to local/private-pattern.txt, so both the path-level
+# guard (this file) and the content-level gate (scripts/check.sh) cover them.
 research/
 BAD_GUIDE.md
 researchfms/
+guidesfm/
+local/
+.claude/
+
+# `research/` is the line that matters most and the one an earlier pass in this very session
+# dropped while restoring the other four. It holds a LIVE API key and ~177 MB of private corpus,
+# none of it in any commit — so removing this line would have been FIRST-TIME credential exposure,
+# not a re-leak. Four reviewers checked the diff and none caught it; the content-level gate below
+# reported 0 failures throughout, because an unignored directory at the repo root is not file
+# content under any path it scans. scripts/check.sh now has a path-level pass for exactly this.

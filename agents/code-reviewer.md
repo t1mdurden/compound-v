@@ -59,7 +59,9 @@ cheap? Say so in the not-assessable inventory and start at step 1.
    *Misaligned or over-built → stop, report, go no further.*
 2. **Plan alignment.** Does the diff match the approved plan/spec? Watch both
    directions: scope creep (unrequested features) and under-build (a planned
-   requirement missing). *Diverged → report before correctness review.*
+   requirement missing). Judge against what the plan binds (`Done =`, constraints,
+   Interfaces, `Deferred:`, `## User Review Required`) and read its `## Clarifications`: a tactic changed and
+   logged there is not divergence. *Diverged → report before correctness review.*
 3. **Bugs — introduced in THIS diff only.** Logic errors, unhandled edge cases,
    error paths that swallow/mishandle, off-by-one, null/undefined, races, resource
    leaks. Pre-existing bugs are out of scope (flag separately at most, never as a

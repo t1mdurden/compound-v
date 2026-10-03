@@ -32,6 +32,35 @@ Build the strongest form of the *counter*-argument — the one its smartest prop
 **Seek the disconfirming case, not agreement.**
 Pressure-test a conviction by hunting for the input or argument that *breaks* it — breadth-first, looking for the limit — instead of collecting wins that confirm it. (A claim is only worth something if you can say what would falsify it — so probe for where it fails, not for more demos that confirm it.) **And look where disconfirmation actually lives: with the population that opted out** — the people who did not buy, did not adopt, did not click, did not reply. Whoever stayed can only tell you why the thesis holds; only the refusers know where it stops. That population is the one you never hear from by default, so going to get it is the work (its commercial instance — interrogate non-buyers, not fans — is in **compound-v:startup-taste**). Two tells you're fooling yourself: your reasoning lands exactly where everyone already is, or no evidence could change your mind — that's an identity, not a conclusion. **And check the frame, not just the claim:** the deepest disconfirmation is finding you're rigorously right about the *wrong question*. Ask why the problem is even posed this way — "why does this workflow exist at all?" not "how do I make it faster?" The real heretic questions the premise itself, not the answer inside the frame.
 
+## Why your own confidence cannot be the check — the measured version
+
+The intuition is that experience calibrates you, and that with enough feedback your confidence
+starts tracking your accuracy. **Measured, it does not.** Tournament chess players — who receive
+feedback that is objective, precise, public and continuous, and who have an exact number attached to
+their skill — still rated their own ability roughly **89 Elo points above their actual rating**, and
+only a small minority of the overconfident ones ever reached the level they claimed. If years of
+unambiguous scored feedback does not calibrate a person, a few hours of reasoning about your own
+conclusion will not either. The same gap has been measured on the question closest to this kit —
+*did the tool make the work faster?* In a randomized trial, experienced open-source developers
+forecast that AI would cut their task time by 24%, still estimated a 20% cut after doing the work,
+and were measured taking 19% longer. The sign of that effect is dated (early-2025 tools; the same
+lab's 2026 follow-up points to speed-ups); what has not dated is that the people who did the work
+misread its sign. So a claim that a tool, an agent or a change made work faster needs a timed
+comparison, never the felt speed-up — your own included.
+
+Two consequences for how this skill is run:
+
+- **The gates below are external instruments, not introspection.** "I thought about it carefully and
+  I am confident" is the state the chess players were in. Run a gate that can return a result you
+  did not want, or you have not run one.
+- **Beware the tempting explanation that you were simply under-informed.** Missing context does
+  produce confident error — but this result shows the reverse is not guaranteed: supplying the
+  information does not reliably remove the overconfidence. Do not treat "I'll go read more" as
+  having addressed the problem. See `references/context-is-the-work.md`, which carries the same
+  finding as a limit on the kit's own premise.
+
+*(One study, and one that cuts against a claim this kit makes elsewhere — which is why it is here.)*
+
 ## Shared with startup-taste — use them there, don't re-derive
 - **Idea vs ego at a wall** (persistence and obstinacy split on whether you're attached to the *goal* or your *means*) and **actually contrarian, or just confident?** (the contrarian-insight + timing test) both live in **compound-v:startup-taste**.
 

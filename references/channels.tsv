@@ -1,0 +1,79 @@
+# Verified source channels for on-demand mining. Columns: handle <TAB> channel name <TAB> tier <TAB> what it is good for / what to skip
+#
+# WHY A REGISTRY OF CHANNELS AND NOT A LIBRARY OF TRANSCRIPTS.
+# A stored transcript is a snapshot that goes stale, costs disk, must be re-synced, and — worst —
+# gets summarised on the way in, so the detail you need later is exactly what was dropped. A channel
+# handle is ~40 bytes, never goes stale, and `scripts/yt.sh` pulls the FULL text of the one talk that
+# bears on today's question. Mine on demand; store the pointer, never the payload.
+#
+# RECALL FIRST, THEN FILTER. Use `yt.sh sweep "<regex>"` (dumps every title and greps them HERE) over
+# `yt.sh mine` (YouTube's own in-channel search). YouTube's matcher is fuzzy and title-only: it
+# silently under-collects, and a talk you never listed cannot be judged. A full title dump is ~1,100
+# titles in ~13s per channel, so breadth is nearly free. A false positive costs one transcript; a
+# false negative costs a source you never knew existed.
+#
+# THE REAL FILTER IS THE SOURCE, NOT THE SEARCH. Technical YouTube is mostly marketing — launch
+# announcements, tool promos, PR dressed as education. That noise is not filterable by keyword,
+# because it uses the same words. It is filterable by WHO PUBLISHED IT, which is why this list is
+# curated and short rather than a search over all of YouTube.
+#
+# EVERY HANDLE WAS VERIFIED BY READING BACK THE CHANNEL NAME. This is not ceremony: `@Anthropic` is a
+# Super Mario Maker gameplay channel (the lab is `@anthropic-ai`), `@NextJS` is a Spanish music
+# video, and `@claudeai` is dead while `@claude` is live. A guessed handle silently mines a stranger
+# and every finding downstream inherits it. `bash scripts/yt.sh verify <handle>` before adding a row.
+#
+# TAKE THE DEVELOPER ACCOUNT, NOT THE MAIN ONE. Most large orgs run both, and the main channel is
+# where marketing lives. Probed and swapped: @palantirtech is customer marketing (Sovereignty
+# Bootcamp, NATO) while @palantirdevelopers carries DevCon engineering deep-dives; @AWSEventsChannel
+# is summit keynotes while @AWSDevelopers is agent observability and Lambda internals. And a name
+# does not settle it either way — @OpenAI is a CONSUMER AD channel now (30-second brand spots), and
+# @claude is product marketing, despite both being the "official" account of an engineering company.
+# Probe the newest few titles with `yt.sh titles <handle> 5` before writing the last column.
+#
+# A ROW MUST EARN ITS CLAIM, NOT JUST RESOLVE. A Stripe row sat here claiming to be the best public
+# source on idempotency; probing returned a brand film called "The beauty in simplicity". True of
+# Stripe's DOCS, false of their channel. Probe with `sweep` or `csearch` before writing the last
+# column, and delete a row whose claim does not survive.
+#
+# CAPTIONS ARE SUBSTANCE, NEVER QUOTATION — see references/public-sources.md. A talk listed under
+# YouTube's *manual* subtitle section still rendered "Claude Code" as "Cloud Code" throughout.
+#
+# OPERATIONAL: yt-dlp gets bot-walled under parallelism. Resolving 512 videos 8-way returned
+# "Sign in to confirm you're not a bot" for 43% of them. Keep concurrency low and add a delay; the
+# failures are throttling, not dead videos, and reading them as "source unavailable" is wrong.
+#
+# TIERS: core = densest technical alpha, sweep these first. platform = vendor dev channels, real
+# engineering mixed with launch marketing. research = academic/lab. podcast = long-form interviews.
+#
+aiDotEngineer	AI Engineer	core	THE densest lane for this kit: practitioners describing harnesses, evals and what broke, at length, with slides. Not marketing-free: of 67 talks picked and read in full on 2026-09-21, 15 carried no pitch, 48 some and 4 were mostly product — judge the speaker, not the stage. 1,159 videos against alpha.sh's 200-title sweep window, so the channel's older canon is registered in references/talks.tsv.
+anthropic-ai	Anthropic	core	The people who build this CLI: harness design, context engineering, what they unshipped. Mixed with general/research content ("How Icelanders are thinking about AI") — the engineering talks are the minority, so sweep with a specific regex.
+claude	Claude	platform	PRODUCT channel, not an engineering one — recent feed is feature marketing (Claude for Word, Cowork). It does hold the Code w/ Claude talks that 13 corpus transcripts came from, so sweep it, but expect a low hit rate and do not treat it as a core lane.
+ycombinator	Y Combinator	core	Founders and CTOs on building and scaling. Bias to the engineering talks; skip the fundraising ones.
+ycrootaccess	YC Root Access	core	Founder/CTO build stories from operators (Datadog, PostHog, Supabase) — how the company was actually built, including what they refused. More decision-making than code.
+OpenAI	OpenAI	platform	DEMOTED from core after a content probe: the recent feed is consumer advertising (30-second brand spots, "Use ChatGPT Work on Your Phone"). The DevDay engineering sessions are real and 15 corpus transcripts came from here, but they are a minority — sweep for them by name, do not browse this channel.
+GoogleDevelopers	Google for Developers	core	Model and tooling deep-dives; I/O engineering tracks rather than keynotes.
+palantirdevelopers	Palantir Developers	core	DevCon deep-dives and deployed-engineering practice. Probed against @palantirtech, whose feed is customer marketing (Sovereignty Bootcamp, NATO) — take the developers account, not the main one.
+InfoQ	InfoQ	core	Architecture talks from named engineers at scale. Older material still load-bearing on distributed-systems mechanism.
+LatentSpacePod	Latent Space	podcast	AI-engineering interviews with builders. Consistently technical rather than promotional.
+DwarkeshPatel	Dwarkesh Patel	core	Probed 2026-09-10 over all 207 titles: about two in five are builders of frontier systems, first-person and at length — Sholto & Trenton (x3), Schulman, Karpathy, Sutton, Ilya, Dario, Dean & Shazeer, Zuckerberg on AI writing Meta's code, Reiner Pope on how Claude/GPT/Gemini are trained and served. The rest is history, geopolitics, economics and biology (Sarah Paine alone is ~20) — skip by guest, never by keyword. What earns the tier: recent episodes carry a full WRITTEN transcript at dwarkesh.com/p/<slug> (publications.tsv), so unlike every other channel here it is quotable; 2021-era episodes (Uncle Bob) are audio-only pages. Four episodes already ground kit claims (sources.md).
+LennysPodcast	Lenny's Podcast	podcast	Product and org practice from people who shipped. Mine the engineering segments; much is product-manager framing.
+googlecloudtech	Google Cloud Tech	platform	Real mechanism (MCP servers, Cloud CLI internals) mixed with beginner marketing ("Launch your portfolio website with AI"). Filter hard; the engineering half is genuinely good.
+AWSDevelopers	AWS Developers	platform	Agent observability, Lambda internals, distributed-systems mechanism. Probed against @AWSEventsChannel, which is summit keynotes and customer stories — take the developers account.
+MicrosoftDeveloper	Microsoft Developer	platform	Agent frameworks and enterprise-scale engineering sessions. Largest corpus contributor by count.
+AzureDevelopers	Microsoft Azure Developers	platform	Cloud-platform engineering sessions.
+NVIDIADeveloper	NVIDIA Developer	platform	GPU, inference and serving mechanism. Skip the GTC keynote marketing.
+MetaDevelopers	Meta Developers	platform	Llama and infrastructure engineering sessions.
+AppleDeveloper	Apple Developer	platform	WWDC engineering sessions — the platform's own contract, and unusually well-produced.
+VercelHQ	Vercel	platform	Next.js/React internals and the AI SDK from the maintainers, mixed with customer success stories. The engineering talks are worth it; the "how X ships faster on Vercel" ones are sales.
+GitHub	GitHub	platform	Mostly Copilot product tutorials. Occasionally a real maintainer interview. Low yield — sweep it, do not browse it.
+a16z	a16z	platform	Operator interviews; infrastructure and AI-systems conversations. Mixed with portfolio marketing.
+googledeepmind	Google DeepMind	research	Frontier research talks. Read for mechanism, not for product.
+stanfordonline	Stanford Online	research	Full lecture courses — the deepest free teaching material on this list.
+Deeplearningai	DeepLearningAI	research	Course and short-course material. Structured teaching rather than practitioner war stories.
+cursor_ai	Cursor	core	Mixed feed, but it hosts the Compile conference — real technical talks from named researchers and engineers. Sweep for "Compile" specifically; the rest is launches and customer case studies.
+AndrejKarpathy	Andrej Karpathy	core	Probed and confirmed: build-it-from-scratch teaching ("Let's reproduce GPT-2", "Let's build the GPT Tokenizer", "How I use LLMs"). Zero marketing. Among the highest signal-per-minute on this list.
+warpdotdev	Warp	platform	DEMOTED from core after a probe: the feed is product feature announcements ("Introducing Agents 3.0", "Using Agent Profiles"), not design rationale. Useful for seeing what a terminal agent ships, not for why.
+LangChain	LangChain	platform	Agent and tool abstractions; useful for the seams and for what an abstraction tax looks like.
+HuggingFace	Hugging Face	research	Open-model engineering, training and inference mechanism.
+cohereai	Cohere	research	Enterprise LLM engineering and retrieval work.
+allenai	Ai2	research	Open-model research and evaluation methodology.

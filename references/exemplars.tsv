@@ -1,0 +1,61 @@
+# Exemplar repos — read how a codebase that LIVES with this actually does it, at a pinned version.
+# Columns: owner/repo <TAB> stack <TAB> subtree to read <TAB> what it is the exemplar FOR
+#
+# The rung above scripts/stack.sh. stack.sh answers "what is the signature of what I installed".
+# This answers "what SHAPE would someone who has run this in production reach for" — which is the
+# question a best-practices listicle cannot answer, because the honest answer is code.
+#
+# ===== NEVER SELECT BY STARS. STARS ARE MARKETING. =====
+# Measured, and the control is decisive: `sindresorhus/awesome` has **501,961 stars** — 4x
+# openai/codex, 10x calcom/cal.com — and is a curated list of links with no language, no releases,
+# no fix-notes and no tests. It scores 1/5 on `exemplar.sh vet`. Stars measure REACH, and reach is
+# exactly what a launch, a newsletter or a conference talk can buy. What cannot be bought cheaply is
+# a codebase somebody has had to keep working for other people.
+#
+# So `bash scripts/exemplar.sh vet <owner/repo>` scores five things and deliberately prints the star
+# count as NOT SCORED:
+#   language set        — it is a codebase, not a list or a docs site
+#   not archived        — someone is still on the hook for it
+#   releases exist      — it is versioned rather than a snapshot
+#   fix-notes           — changelogs carry BUG FIXES, not only features. This is the sharpest signal:
+#                         features are what you write when shipping; fixes are what you write when
+#                         real users hit real edges. Documentation and a green suite got cheap; an
+#                         hour now produces both for code its author has never run.
+#   tests               — weak on its own, meaningful with the rest
+# A score is a floor, never a reason. The real test is whether strangers filed issues and somebody
+# answered them — proof of USAGE over proof of work.
+#
+# ===== ADAPTABLE PER PROJECT — the registry is a seed, not the answer =====
+# Most stacks have no row here and never will. For those:
+#   bash scripts/exemplar.sh find "<term>" [language] [n]
+# discovers candidates via `gh search repos` (which works, unlike `gh search code`) and vets each one
+# stars-blind, because search ranks by popularity and popularity is what we refuse to trust. Then
+# `grep` the subtree to confirm the pattern is actually present — a repo that vets 5/5 and does not
+# contain your pattern is not your exemplar.
+#
+# ADD A ROW ONLY AFTER PROBING IT. `exemplar.sh grep <repo> <subtree>` must return a non-zero file
+# count, and the subtree must contain the pattern the row claims. A row whose path has moved sends
+# every future run to an empty directory and reports it as "no prior art".
+#
+# DELIBERATELY EXCLUDES THE CONTESTED LAYERS — state management, auth choice, the ORM wars. There is
+# no single right answer there, so a named pick is an opinion aging into wrong. Read the primary
+# sources and say the choice is contested.
+#
+calcom/cal.com	typescript/next/trpc	packages/trpc	A large real Next + tRPC + Prisma product. Router composition, procedure/middleware shape, how auth threads through context.
+trpc/trpc	typescript/trpc	packages/server/src	The maintainer's own source — the contract itself, ahead of any docs page.
+vercel/next.js	typescript/next	packages/next/src/server	App Router internals: rendering, caching, and route handling as the maintainers implement them.
+drizzle-team/drizzle-orm	typescript/sql	drizzle-orm/src	Type-safe SQL without an ORM's abstraction tax; schema and query-builder shape.
+openai/codex	rust/agents	codex-rs	A shipped coding agent in the open: harness loop, tool surface, sandboxing, approval flow.
+anthropics/anthropic-sdk-typescript	typescript/llm	src	Streaming, tool-use and retry shape for an LLM client, from the vendor.
+langchain-ai/langchain	python/agents	libs/core/langchain_core	Agent and tool abstractions at scale — read it for the seams, and for what an abstraction tax looks like.
+supabase/supabase	typescript/postgres	packages	Auth, realtime and storage against Postgres in a large product monorepo.
+TanStack/query	typescript/tanstack	packages/query-core/src	Server-state caching done properly — the query lifecycle, invalidation, retry and dedup as a state machine rather than ad-hoc effects.
+TanStack/router	typescript/tanstack	packages/router-core/src	Type-safe routing and search-param-as-state. Read for how types are threaded end to end without codegen.
+fastapi/fastapi	python/fastapi	fastapi	The maintainer's own source: dependency injection, request validation and async handling. The docs are good; the source is the contract.
+vercel/ai	typescript/llm	packages/ai/src	Streaming, tool-calling and provider abstraction for LLM apps, from the team that ships the most-used JS AI SDK.
+grafana/grafana	go/services	pkg/services	A large Go product a proven company operates: service boundaries, plugin architecture, auth threading. Read for Go structure at scale.
+kubernetes/kubernetes	go/reconcilers	pkg/controller	THE reference implementation of the desired-state reconciler — and of its traps: cooldowns, ownership, and why every loop grows a second piece of state.
+getzep/graphiti	python/agent-memory	graphiti_core/utils/maintenance	The code for references/shapes.md's 'Append-only with a validity interval', which names the shape with no exemplar: facts carry valid_at/invalid_at, an LLM classifies duplicates and contradictions, and code — resolve_edge_contradictions in edge_operations.py — decides which edge expires by comparing event times. Read open issues #1865 and #1837 with it: temporal dedup that collapses disjoint occurrences, and a deleted fact surviving in an entity summary — the shape row's 'deleting the source does not delete what was derived' trap, live.
+google-gemini/gemini-cli	typescript/agents	packages/core/src/context	Context compaction in a shipped coding CLI, both levers context-engineering names: a <state_snapshot> compression prompt that must fold the previous snapshot in rather than lose it (chatCompressionService.ts), and tool-output masking to file behind a protection window — the newest 50k tool tokens kept, masking triggered only once 30k more are prunable (toolOutputMaskingService.ts). The experimental contextManagement path is off by default (config.ts), so do not read it as live behaviour.
+langchain-ai/deepagents	python/agents	libs/deepagents/deepagents/middleware	A maintained harness removing a default on measurement: PR #4929 made the todo-list middleware opt-in after benchmarking three models found no significant accuracy gain and higher cost on two — read the PR bodies and libs/deepagents/CHANGELOG.md, not only the code. rubric.py is a frozen-criteria grader loop. Same commercial orbit as the langchain-ai/langchain row.
+letta-ai/letta-code	typescript/agent-memory	src/agent	Git-backed plain-file agent memory with an offline reflection pass done safely: the reflection writes in its own worktree and branch with scoped writable roots, then merges back, and a conflict aborts the merge and is marked retryable (memory-worktree.ts, finalize statuses merged / no_changes / parent_dirty / merge_conflict). The code form of the consolidation pass argued in talk 9QebvrrY3KY. Read this repo, not letta-ai/letta, whose README says the current source lives here.

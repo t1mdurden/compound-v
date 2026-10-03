@@ -40,6 +40,13 @@ command -v jq >/dev/null 2>&1 || exit 0
 transcript="$(printf '%s' "$input" | jq -r 'try (.transcript_path // "") catch ""' 2>/dev/null)"
 [ -n "$transcript" ] && [ -r "$transcript" ] || exit 0
 
+# The claim is read from `last_assistant_message` when the harness supplies it. The transcript is
+# written asynchronously and "isn't guaranteed to include the final message at Stop time on all
+# versions" (hooks reference), so its tail can stop short of the turn's last messages — and this
+# gate would then judge an older line, find no claim, and fail open on exactly the claim it exists
+# to catch.
+final="$(printf '%s' "$input" | jq -r 'try ((.last_assistant_message // "") | if type == "string" then . else "" end) catch ""' 2>/dev/null)"
+
 # A completion claim, anchored at clause start. Deliberately narrow: a claim buried mid-clause
 # ("the retry logic is done") is allowed through rather than risk a false block.
 CLAIM='^(all )?(done|fixed|it works( now)?|works now|tests? (now )?pass(ing|ed)?|all tests pass(ing|ed)?|готово|исправлено)\b'
@@ -48,7 +55,7 @@ NEG='\b(not|isn.?t|aren.?t|won.?t|wasn.?t|doesn.?t|didn.?t|can.?t|cannot|never|s
 
 # Only the tail is read: a turn that ran zero commands is short by nature, and if the turn
 # boundary isn't inside the window we fail open instead of guessing at a narrower turn.
-verdict="$(tail -n 500 "$transcript" 2>/dev/null | jq -s -r --arg claim "$CLAIM" --arg neg "$NEG" '
+verdict="$(tail -n 500 "$transcript" 2>/dev/null | jq -s -r --arg claim "$CLAIM" --arg neg "$NEG" --arg final "${final:-}" '
   # A real user turn starts at a user message that is not a tool result and not harness meta.
   def is_turn_start:
     .type == "user" and ((.isMeta // false) | not) and
@@ -59,15 +66,42 @@ verdict="$(tail -n 500 "$transcript" 2>/dev/null | jq -s -r --arg claim "$CLAIM"
   | if $start == null then "SKIP no-turn-boundary" else
       ($t[$start:]) as $turn
       | [$turn[] | select(.type == "assistant") | .message.content[]? | select(.type == "tool_use") | .name] as $tools
+      # A Bash call whose command cannot observe anything is not evidence. `echo ok` satisfied this
+      # gate for its whole life, which is the forgeable-attestation failure the kit warns about,
+      # committed by the kit: a gate that accepts any command teaches that any command suffices.
+      # Deliberately minimal — echo/true/: can NEVER verify anything, while `ls` legitimately can
+      # (it answers "was the file written"), so widening this list past the contentless three
+      # would start false-blocking real checks, which is the worse error here.
+      | [$turn[] | select(.type == "assistant") | .message.content[]? | select(.type == "tool_use")
+         | select(.name == "Bash") | (.input.command // "")
+         # A bare sub, NOT map(): at this point the value is one command STRING, and map() on a
+         # string is a jq error that fails the whole expression — which falls through to ALLOW,
+         # turning a tightened gate into no gate. Caught by hooks-test.sh, which is the point of it.
+         | sub("[;&|[:space:]]+$";"")
+         # `\b` after `:` requires an adjacent word character that never exists, so a bare `:`
+         # counted as real work and satisfied the gate; a trailing `;` or `&` did the same for
+         # `echo ok;` and `true;`. Strip trailing separators first, and drop `\b` for `:`.
+         | select((test("^\\s*(echo\\b[^&|;]*|true|:)$")) | not)] as $realcmds
+      | [$turn[] | select(.type == "assistant") | .message.content[]? | select(.type == "tool_use")
+         | select(.name == "Edit" or .name == "Write" or .name == "MultiEdit" or .name == "NotebookEdit")
+         | (.input.file_path // .input.notebook_path // "")] as $paths
       | [$turn[] | select(.type == "assistant") | .message.content[]? | select(.type == "text") | .text] as $texts
       | if ([$tools[] | select(. == "Edit" or . == "Write" or . == "MultiEdit" or . == "NotebookEdit")] | length) == 0
         then "SKIP no-edits"
-        elif ([$tools[] | select(. == "Bash")] | length) > 0
+        # Prose-only turns have no command that could observe the change. Demanding one is a
+        # false block on the single most common Trivial-tier task — a README typo — and the
+        # message it produced told the reader to run a literal placeholder string. A gate that
+        # cannot name a real command must not block; over-triggering is exactly as wrong as
+        # under-triggering, and failing open is the whole design premise here.
+        elif (($paths | length) > 0
+              and ([$paths[] | select((test("\\.(md|markdown|txt|rst|adoc|mdx)$"; "i")) | not)] | length) == 0)
+        then "SKIP docs-only"
+        elif ($realcmds | length) > 0
         then "SKIP bash-ran"
-        elif ($texts | length) == 0
+        elif ($texts | length) == 0 and ($final | length) == 0
         then "SKIP no-text"
         else
-          [ ($texts | last) | split("[.!?\n]"; "")[]
+          [ (if ($final | length) > 0 then $final else ($texts | last) end) | split("[.!?\n]"; "")[]
             | sub("^[\\s*_#>`~-]+"; "")
             | select(test($claim; "i")) | select((test($neg; "i")) | not) ]
           | if length > 0 then "BLOCK" else "SKIP no-claim" end
@@ -85,14 +119,23 @@ elif [ -f "$cwd/package.json" ] && grep -q '"test"' "$cwd/package.json" 2>/dev/n
 elif [ -f "$cwd/pyproject.toml" ] || [ -f "$cwd/pytest.ini" ];             then cmd='the project test command'
 elif [ -f "$cwd/Cargo.toml" ];                                             then cmd='cargo test'
 elif [ -f "$cwd/go.mod" ];                                                 then cmd='go test ./...'
-else cmd='the command that would prove this'
+else cmd=''
 fi
 
-jq -n --arg cmd "$cmd" \
+BT=$(printf '\140')
+# With no inferable command, name the shape of the evidence rather than a placeholder string.
+# The previous fallback rendered literally as: Run <the command that would prove this>.
+if [ -n "$cmd" ]; then
+  run_line="Run ${BT}${cmd}${BT}, read the output yourself"
+else
+  run_line="Run whatever would actually exercise this — boot it, call it, execute the file — and read the output yourself"
+fi
+
+jq -n --arg run "$run_line" \
   --arg msg 'Compound V: completion claimed, nothing run.' \
   '{decision: "block",
     reason: ("You edited files this turn, ran no command at all, and then claimed the work was done. "
-             + "Run `" + $cmd + "`, read the output yourself, and report the real result — "
+             + $run + ", and report the real result — "
              + "including a failure, which is worth more than a false green. "
              + "If that was not a completion claim, say what is still outstanding and stop; "
              + "this gate blocks at most once per turn. See compound-v:verification-before-completion."),

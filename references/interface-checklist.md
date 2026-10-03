@@ -47,6 +47,7 @@ name it, fix it. A property you can name you can fix and hand off; one you can't
   - Dialogs/popovers scale in from **~0.8, not 0** (0 looks like a glitch); fade opacity alongside. *(SKILL body)*
   - Buttons depress to **~0.96 / ~0.9** on press, never to 0. *(SKILL body)*
 - Frequent / low-novelty actions drop the animation — right-click menus, list add/delete, trivial hovers. (An element seen 100+ times a day should *lose* its motion.) *(SKILL body)*
+- A hover highlight keeps half its motion: on **instantly** (it reads as fast), off with a ~150ms fade (it reads as smooth) — put the `transition` on the resting state and `transition: none` on `:hover`. It is the item most often missing on a new feature, because nobody sees it missing unless they look for it.
 - Looping animations pause when off-screen (saves CPU/GPU). *(SKILL body)*
 - `scroll-behavior: smooth` for in-page anchors, with a scroll offset so the target isn't flush to the edge.
 

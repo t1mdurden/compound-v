@@ -25,6 +25,14 @@ escape_for_json() {
 router_escaped=$(escape_for_json "$router_content")
 session_context="<EXTREMELY_IMPORTANT>\nYou have Compound V — a lean skill set for shipping great software with agentic AI (taste, context engineering, security-first review, no bullshit, no overkill).\n\n**Below is the full content of your 'compound-v:using-compound-v' router skill. For all other Compound V skills, use the 'Skill' tool.**\n\n${router_escaped}\n</EXTREMELY_IMPORTANT>"
 
+# jq is a HARD dependency of both Stop gates and of ledger.sh, and they fail OPEN by design — so
+# without jq the verification gate silently does nothing and the session looks identical to one
+# where it is working. This hook is pure bash, needs no jq itself, and runs once per session, which
+# makes it the only place a stranger can be told before it matters rather than after.
+if ! command -v jq >/dev/null 2>&1; then
+  session_context="$session_context\n\n[COMPOUND V] \`jq\` is not installed, so the verification and ledger Stop gates are OFF (they fail open on purpose). Nothing will stop a completion claim that ran no command. Install it — \`brew install jq\` or \`apt install jq\` — then run \`bash scripts/preflight.sh\` to check the rest."
+fi
+
 # Emit only the field the current platform consumes (printf, not heredoc — bash 5.3+ heredoc hang).
 if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -z "${COPILOT_CLI:-}" ]; then
   printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context"
