@@ -364,6 +364,21 @@ if [ "$?" -ne 124 ]; then pass=$((pass + 1)); printf '%-46s %-8s ok\n' "ledger.s
 else miss=$((miss + 1)); failures+=("ledger.sh --path with no value hangs")
      printf '%-46s %-8s MISS hangs\n' "ledger.sh: --path with no value" "exit2"; fi
 
+# Router off switch. A user whose own CLAUDE.md routes the skills sets COMPOUND_V_ROUTER=off: the
+# SessionStart router and the per-prompt reminder then emit nothing, and the Stop gates are untouched.
+rt() { # rt <name> <hook> <router-env> <expect: SILENT|EMITS>
+  local name="$1" h="$2" env="$3" expect="$4" out got
+  out="$(COMPOUND_V_ROUTER="$env" CLAUDE_PLUGIN_ROOT="$root" bash "hooks/$h" </dev/null 2>/dev/null)"
+  got="SILENT"; [ -n "$out" ] && got="EMITS"
+  if [ "$got" = "$expect" ]; then pass=$((pass + 1)); printf '%-46s %-8s ok\n' "$name" "$expect"
+  else miss=$((miss + 1)); failures+=("$name — expected $expect, got $got")
+       printf '%-46s %-8s MISS got %s\n' "$name" "$expect" "$got"; fi
+}
+rt "router: session-start on"                 session-start      on  EMITS
+rt "router: session-start off"                session-start      off SILENT
+rt "router: user-prompt-submit on"            user-prompt-submit on  EMITS
+rt "router: user-prompt-submit off"           user-prompt-submit off SILENT
+
 printf '\n%s/%s cases behaved\n' "$pass" "$((pass + miss))"
 if [ "${#failures[@]}" -gt 0 ]; then
   printf '\nMisses:\n'; printf '  %s\n' "${failures[@]}"

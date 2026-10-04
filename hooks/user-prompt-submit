@@ -7,6 +7,9 @@
 
 set -euo pipefail
 
+# Off switch, shared with session-start: COMPOUND_V_ROUTER=off silences the per-prompt reminder.
+[ "${COMPOUND_V_ROUTER:-on}" = "off" ] && exit 0
+
 reminder="Compound V is active. Before acting on a non-trivial request, check whether a Compound V skill applies and invoke it with the Skill tool FIRST — don't silently skip an applicable skill (proactive routing is the discipline this kit exists to enforce). When unsure how to route, consult compound-v:using-compound-v. Trivial one-liners need no skill."
 
 # Emit only the field the current platform consumes (printf, not heredoc — bash 5.3+ heredoc hang).
