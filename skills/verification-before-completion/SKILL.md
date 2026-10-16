@@ -1,6 +1,7 @@
 ---
 name: verification-before-completion
 description: Run the command that proves a claim and read its output before asserting the work is done, fixed, or passing. Use whenever you're about to say something works, claim a fix or feature is complete, report tests/build green, or trust that a subagent finished — evidence before assertions, always.
+disable-model-invocation: true
 ---
 
 # Verification Before Completion

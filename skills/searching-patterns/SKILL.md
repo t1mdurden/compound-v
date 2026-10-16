@@ -1,6 +1,7 @@
 ---
 name: searching-patterns
 description: Read the real source before writing code against a dependency — the installed copy first, then the canonical pattern and its matching anti-pattern at your locked version. Use before writing against any library, API, framework or SDK; when coding a third-party endpoint, price or response shape from a spec, PRD, ticket or memory rather than its current docs; on any silent-wrongness surface where the wrong version compiles and passes — auth, secrets, retries, concurrency, idempotency, money, SQL, path handling, deserialization, an optional parameter whose default moved; when unsure how a framework wants something done or which major you are on; when picking between libraries; or to confirm a best practice during review — even if nobody asks. Run scripts/stack.sh to resolve the stack and its versions. Skip the external lookup for a loop, a standard-library call, or a shape the repo already demonstrates.
+disable-model-invocation: true
 ---
 
 # Searching Patterns

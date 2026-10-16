@@ -1,6 +1,7 @@
 ---
 name: dispatching-parallel-agents
 description: Fan work out to multiple sub-agents only when the pieces are genuinely independent — file-disjoint, no shared state. Use when you have several independent tasks (multi-file edits, parallel research, batch processing) and are deciding whether to parallelize, how to brief each agent, and how to combine results. If the work is coupled, don't split it.
+disable-model-invocation: true
 ---
 
 # Dispatching Parallel Agents

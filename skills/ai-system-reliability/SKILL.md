@@ -1,6 +1,7 @@
 ---
 name: ai-system-reliability
 description: Make a built AI system reliable at scale — supervisor/specialist constellations, the simulator-as-regression, the "make the missing capability enforceable" failure reflex, and the state-corruption landmines at the seams (idempotency, concurrency, durable resume). Opt-in (manual): invoke when the user explicitly asks for help making an AI system reliable, chaining it past one model's ceiling, or fixing drift / double-fires / races at scale, names this skill, or another Compound V skill hands off here. Do not auto-trigger on an incidental mention of reliability; this is a deliberate deep-dive.
+disable-model-invocation: true
 ---
 
 # AI System Reliability

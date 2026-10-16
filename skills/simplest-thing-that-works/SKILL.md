@@ -1,6 +1,7 @@
 ---
 name: simplest-thing-that-works
 description: Pick the mechanism a goal actually needs — anywhere from a rule or a SQL query up to a full multi-agent system — capping the machinery without capping the goal. Opt-in (manual): invoke when the user asks which mechanism to use or how simple the thing can be — "what's the simplest way to do this", "script, rule, one call, or agent?", "do we even need AI for this?", "am I over-engineering this?" — names this skill, or another Compound V skill hands off here; frame-the-goal routes here once "works" is a check. Do not auto-trigger.
+disable-model-invocation: true
 ---
 
 # Simplest Thing That Works

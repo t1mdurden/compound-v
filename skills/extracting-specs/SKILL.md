@@ -1,6 +1,7 @@
 ---
 name: extracting-specs
 description: Recover the real behavioral contract of unfamiliar or undocumented code — what callers actually rely on, not what the docs claim — as an explicit, checkable spec before you touch it. Use when onboarding or resuming a brownfield / inherited codebase, before changing, porting, or rewriting a module whose behavior is nowhere written down, or when a fresh session keeps re-deriving the same behavior from scratch — even if no one asks for a "spec." The backward complement to writing-prd; not for greenfield design (that's brainstorming / writing-prd) or code already specced.
+disable-model-invocation: true
 ---
 
 # Extracting Specs
