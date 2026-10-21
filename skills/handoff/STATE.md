@@ -14,8 +14,11 @@
 ## Suggested skills
 - <skill the next session should invoke first, and the one word why — or "none">
 
-## Open decisions
-- <a judgment: the call you'd make, the one-line reason, "agree?" — or a thing only a person can hand over (a credential, access): name it exactly and what it unblocks — or "none">
+## Decisions
+- <the decision, in the user's words where they gave one> — <"intake", or "default: <one-line reason>">. Read before asking anything: a question this settles is never asked again.
+
+## Hard gates
+- <pending and waiting on a person: what, which kind (irreversible, outward-facing, money, credential or identity, taste with no default), the answer you'd pick, what it unblocks — all sent in one message — or "none">
 
 ## Verify with
 ```bash

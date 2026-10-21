@@ -37,4 +37,4 @@ When the hunt dispatches an agent, its brief is **references/prior-art.md**'s di
 
 **Recon returns a file:line map, not prose** — a cited line either exists or it does not, where a confidently hallucinated architecture reads exactly like a real one. Feed it forward: the shape into the plan, the trap into **compound-v:recheck** as a named checkable assertion, all three into the ledger. At Reckon, a shape that will recur graduates into the table — **compound-v:finishing** step 2.5 runs that harvest and **references/shapes.md** carries the admission bar. Harvest the trap, not the win: most runs graduate nothing, which is the bar working.
 
-**Next:** after the pass over every slice, in an attended run the Carve+Recon approval, then **compound-v:get-shit-done-3-build** for the first slice; after a build-time hunt, straight back to **compound-v:get-shit-done-3-build** for that slice.
+**Next:** after the pass over every slice, **compound-v:get-shit-done-3-build** for the first slice — intake's **Decisions** are the approval; after a build-time hunt, straight back to **compound-v:get-shit-done-3-build** for that slice.

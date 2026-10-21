@@ -5,7 +5,7 @@ description: Wrap up a completed branch — verify the full suite is green with 
 
 # Finishing
 
-Confirm the work is actually green, then land it the way the user chose — or, when nobody is there to be asked, the way that can be undone.
+Confirm the work is actually green, then land it the way the intake decided — or, with nothing decided, the way that can be undone.
 
 ## When to use
 
@@ -25,14 +25,14 @@ Run the full suite this turn and read the exit code yourself — the **compound-
 
 ## Step 2 — Pick the landing path
 
-**Only offer a menu when the user is actually there to answer it.** In an unattended or scheduled run the user is not watching in real time and cannot answer mid-task, so "Want me to…?" simply blocks the work. There, take the **reversible** default — commit, push, open the PR, leave the branch standing — and report what you did. Stop and wait for explicit confirmation only on the irreversible paths: merging into the default branch, force-pushing, or discarding work. When the user *is* present, offer a small structured menu, not an open-ended "what now?":
+**The landing path is an intake decision — read `## Decisions` in `.claude/STATE.md` and take it.** With nothing decided, take the **reversible** default — commit on the branch, leave it standing — and report what you did. Every path past that is a **hard gate** unless **Decisions** already holds the user's yes for it: pushing and opening a PR (outward-facing), merging into the default branch, force-pushing, discarding work. Send the pending ones in one message with the run's report; a worker sends it to the master by `SendMessage`. Put the gate as a small structured choice, not an open-ended "what now?":
 
 1. **Merge locally** into the base branch.
 2. **Push and open a PR.**
 3. **Keep the branch as-is** (leave it for later).
 4. **Discard** the work.
 
-Pick the base branch deliberately (the branch this work forked from, usually `main`/`master`). State it so the user can correct it.
+Pick the base branch deliberately (the branch this work forked from, usually `main`/`master`) and record it under **Decisions**.
 
 ## Step 2.5 — Harvest the trap (the step that makes experience compound)
 
@@ -42,8 +42,7 @@ Before you land, ask one question — and expect the answer to be "nothing" most
 
 A strong engineer's advantage across projects is accumulated scar tissue: the traps they have already
 paid for. An agent starts every session without it, and this is the only step in the kit that adds
-any. Without it, `references/shapes.md` grows only when someone runs a research pass, and the work
-you just finished teaches the next run nothing.
+any: without it, the work you just finished teaches the next run nothing.
 
 **Harvest the pair — the shape and its trap — and let the trap decide whether it is worth a row.**
 The table's columns are `Shape | Reach for it when | Its trap`, so a trap with no shape attached is
@@ -65,7 +64,7 @@ curated table becomes an index.
 
 **The PR body is an artifact, not a title — put the evidence inside the repo's two native sections, don't invent a competing layout.** Under `#### Summary`, at most three bullets on what changed and why, plus the review verdict (`APPROVED`) and any follow-up you deliberately deferred. Under `#### Test plan`, a checklist whose items are the **actual commands you ran and their result lines** — `pytest -q → 214 passed`, never "tests pass". A reviewer should be able to trust the branch from the body alone.
 
-**Discard or any destructive cleanup:** require a **typed confirmation** ("type `discard` to confirm") — a yes/no is too easy to fire by reflex, and this is the one path the unattended default above may never take on its own. Make that confirmation *informed* by first surfacing the work that would vanish unrecoverably: **unpushed commits** (`git log --branches --not --remotes --oneline`, or `git log <base>..HEAD`), which no status check will show you.
+**Discard or any destructive cleanup:** require a **typed confirmation** ("type `discard` to confirm") — a yes/no is too easy to fire by reflex, and this is the one path no intake answer pre-approves. Make that confirmation *informed* by first surfacing the work that would vanish unrecoverably: **unpushed commits** (`git log --branches --not --remotes --oneline`, or `git log <base>..HEAD`), which no status check will show you.
 
 **Where this hands next.** On a Large run the landing is not the end: **compound-v:get-shit-done**'s stage 4 (**compound-v:get-shit-done-4-reckon**) is the product-level done-gate and it runs *after* this skill, once, over the assembled product — `using-compound-v` routes it that way and nothing else in the kit closes over the whole build. On Standard and below, landing is the end.
 

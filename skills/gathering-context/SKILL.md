@@ -125,8 +125,8 @@ the wrong thing.
 
 **6. What you still do not know.** Name the open questions and which are one-way doors, then sort
 each: **a fact the repo can answer is a lookup not yet done, never a question**; only what the repo
-cannot settle reaches the person, ordered by whether the answer changes the architecture, with a
-recommended default that is taken and recorded as an assumption if nobody answers. An unknown you can
+cannot settle goes to `## Decisions` in `.claude/STATE.md` — answered at intake, or the
+recommended default recorded there, ordered by whether it changes the architecture. An unknown you can
 name is a risk; an unknown you cannot is a surprise. **Filling this slot honestly is the
 whole defence against the measured failure**: given insufficient context, models hallucinate rather
 than abstain **15.4–40.4%** of the time. And the context genuinely may not exist — a hand

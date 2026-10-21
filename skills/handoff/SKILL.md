@@ -46,7 +46,7 @@ the other in one line. Never a shared one above them.
    exactly what a session killed mid-step leaves behind. Re-verify that tail; don't trust it and
    don't redo it. **Claim only the part this run can account for**, though: a change that neither the
    state file nor the plan explains may be the user's, or a parallel session's in the same working
-   tree — leave it, never revert it, and ask before building on it.
+   tree — leave it, never revert or build on it, and record it under **Decisions**.
 4. If the goal is still open and the work is unattended, quote the **Goal** line back to the user.
    If their harness has a goal or watchdog mechanism, that text is what arms it — a skill cannot
    arm one on their behalf.
@@ -72,7 +72,7 @@ the other in one line. Never a shared one above them.
   a paraphrase hands the next session your reading of the instruction rather than the instruction.
   If it replaces part of the goal, rewrite that part and stop the work that served only it. A
   correction spent once this step lands stays out; the file holds what must still bind next session.
-- Anything blocked goes in **Open decisions**. If it's a *judgment* — a retry cap, a deploy target, a product call — write it as a **proposal, not a question**: the answer you'd pick, the one-line reason, "agree?". Whoever holds the constraint rarely holds your context, so an open question comes back "it depends" or not at all, while a concrete proposal is answerable in seconds and a *no* comes back naming the constraint you were missing. Write it to be rejected, not rubber-stamped — a proposal shaped to be nodded through buys a yes and loses the constraint. If it's a thing only a person can hand over — a credential, an account, access — there is nothing to propose: name it exactly, and what it unblocks.
+- **Decide and record; only a hard gate waits.** The entry skill's intake round wrote **Decisions** once. A later judgment — a retry cap, a library, a scope reading — reads it first; if it is not there, take the reversible default and append it with its one-line reason. A **hard gate** — irreversible or outward-facing (push, merge, deploy, a message), money, a credential or identity check, a taste call with no defensible default — goes under **Hard gates** as a **proposal, not a question**: the answer you'd pick and the reason, so a *no* comes back naming the constraint you were missing. A thing only a person can hand over (a credential, access) has nothing to propose: name it and what it unblocks. Keep building what does not depend on it, and send every pending gate in one message. In a worker session (its first message was another session's brief) that message goes to the master by `SendMessage`, never to the user; a subagent returns it to its parent.
 - No calendar estimates. Size by steps and by what must be verified.
 
 ## Before a session ends with work unfinished
@@ -90,15 +90,12 @@ timestamp, model, and one sentence saying what you were doing, the exact action,
 and the change that would have avoided it. Give the file `merge=union` in `.gitattributes` so
 parallel worktrees do not conflict on it.
 
-This is **not** the always-loaded instruction file — **compound-v:context-engineering**'s write-gate
-correctly bans transient failures from that, and this has a different reader: whoever repairs the
+This is **not** the always-loaded instruction file, which bans transient failures; it has a different reader: whoever repairs the
 environment, reading in batches, never per turn. **The trap is that a log with no resolution path is
 a graveyard.** It earns its place only if something periodically reads it and changes the
 environment, and an entry closes when that change lands, not when someone reads it. One team has now published a yield,
 from the same loop inside a product: they gave their own agent a channel to report tooling
-friction, and *"approximately 20% of messages warranted a mergeable PR"* — their own number,
-self-reported and uncontrolled. The first one named a tool that had been failing for months on
-filenames carrying a non-breaking space, which nothing else had surfaced. Two conditions travel
+friction, and *"approximately 20% of messages warranted a mergeable PR"* — self-reported and uncontrolled. Two conditions travel
 with it: the agent reports only where it is genuinely blocked — *"too pushy and we'd get a flood
 of 'I had to think for a moment' non-issues; too cautious and the agent silently ground through
 the same broken tool ten times before giving up"* — and an entry is a lead, never a verdict on
@@ -141,17 +138,14 @@ run goes unattended, because every one of them is unrecoverable after the fact:
 5. **Independence between the verifier and the implementer.** Whatever checks the work must not be
    the thing that produced it; that is why `recheck` is read-only.
 
-Note what these are: a termination predicate, a budget, a permission model, an escalation rule. **None
-of them is information you could put in a context window** — this is the one part of working with
+**None of these is information you could put in a context window** — this is the one part of working with
 agents that gathering more context cannot help with, which is exactly why it needs writing down.
 
-**Bounds 3 and 4 both end in "stop and ask" — name who they ask, and how.** An unattended run is
-unattended because nobody is reading the transcript, so a permission boundary or an escalation that
-resolves to a message in the log is a run that has quietly stopped, not one that has escalated. Name
-one out-of-band channel before the run starts and write it in the state file beside the escalation
-condition. **The trap is that a channel used for progress stops being read** — a stream that admits
-non-actionable items degrades response to the whole stream — so fire it only on the escalation
-conditions and on terminal state, never per step or per landed batch.
+**Bounds 2–4 are intake questions; 3 and 4 end in the hard-gate batch — name where it goes.** Nobody
+reads an unattended transcript, so a gate that resolves to a message in the log is a run that has
+quietly stopped. Write one out-of-band channel into **Decisions** before the run starts; in a worker
+session it is `SendMessage` to the master. **A channel used for progress stops being read**, so fire
+it only on a gate batch and on terminal state, never per step or per landed batch.
 
 
 ## Budget
