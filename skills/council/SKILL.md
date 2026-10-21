@@ -1,6 +1,7 @@
 ---
 name: council
-description: Several independent fresh-context takes on one hard question, and a verdict that shows where they disagreed. Use when a judgment call has no checker to run and being wrong is expensive: an architecture or vendor choice, a diagnosis with competing explanations, a strategy, pricing or hiring call, a design nobody can objectively score, or a conclusion that feels obviously right that nobody has pushed back on. Also on "get a second opinion", "what would other models say", "poke holes in this", "am I missing something", or wanting the alternatives laid out rather than one confident answer. Skip it when a test, query or benchmark can settle the question — run that instead.
+description: >-
+  Several independent fresh-context takes on one hard question, and a verdict that shows where they disagreed. Use when a judgment call has no checker to run and being wrong is expensive: an architecture or vendor choice, a diagnosis with competing explanations, a strategy, pricing or hiring call, a design nobody can objectively score, or a conclusion that feels obviously right that nobody has pushed back on. Also on "get a second opinion", "what would other models say", "poke holes in this", "am I missing something", or wanting the alternatives laid out rather than one confident answer. Skip it when a test, query or benchmark can settle the question — run that instead.
 ---
 
 # Council

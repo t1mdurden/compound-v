@@ -1,6 +1,7 @@
 ---
 name: writing-prd
-description: Write or maintain a PRD — the product's stable, model-agnostic source of truth that a person or a fresh AI session reads first to get most of the context in one pass: what the product is, what it does, and what it runs on. Use when asked for a PRD, a product doc, or a product spec, when bootstrapping `docs/` for a new product, when a fresh session keeps re-deriving the same product context, when onboarding a human or agent to an existing product, or when the product's durable facts have moved and the doc hasn't. Not for per-build decisions (that's writing-plans) or designing one feature (that's brainstorming).
+description: >-
+  Write or maintain a PRD — the product's stable, model-agnostic source of truth that a person or a fresh AI session reads first to get most of the context in one pass: what the product is, what it does, and what it runs on. Use when asked for a PRD, a product doc, or a product spec, when bootstrapping `docs/` for a new product, when a fresh session keeps re-deriving the same product context, when onboarding a human or agent to an existing product, or when the product's durable facts have moved and the doc hasn't. Not for per-build decisions (that's writing-plans) or designing one feature (that's brainstorming).
 ---
 
 # Writing a PRD

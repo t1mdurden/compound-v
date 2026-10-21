@@ -1,6 +1,7 @@
 ---
 name: test-driven-development
-description: Write a failing test before the implementation, watch it fail for the right reason, then make it pass. Use when implementing a feature or fixing a bug, before writing implementation code, when a regression must not come back, or when you realise you wrote the code first and want it genuinely covered. Verifying RED is its own step — a test written alongside the code proves nothing about whether it is bound to the code. Not for a typo, a rename, a config flip or a one-liner (the router's Trivial tier owns those: just do it and verify), and it does not introduce a test framework into a repo that has none — that is its own decision with its own review.
+description: >-
+  Write a failing test before the implementation, watch it fail for the right reason, then make it pass. Use when implementing a feature or fixing a bug, before writing implementation code, when a regression must not come back, or when you realise you wrote the code first and want it genuinely covered. Verifying RED is its own step — a test written alongside the code proves nothing about whether it is bound to the code. Not for a typo, a rename, a config flip or a one-liner (the router's Trivial tier owns those: just do it and verify), and it does not introduce a test framework into a repo that has none — that is its own decision with its own review.
 ---
 
 # Test-Driven Development

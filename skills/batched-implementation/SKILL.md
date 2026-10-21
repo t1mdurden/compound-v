@@ -1,6 +1,7 @@
 ---
 name: batched-implementation
-description: Build a settled plan or task list. Use when it is time to construct what was designed — "implement the plan", "build these tasks", "execute the spec", "run the implementer" — on any handoff from an approved design to construction, and again whenever a half-built plan is picked back up: "keep going", "continue the build", or a session that compacted, crashed, or restarted mid-plan. Applies even when nobody names a skill.
+description: >-
+  Build a settled plan or task list. Use when it is time to construct what was designed — "implement the plan", "build these tasks", "execute the spec", "run the implementer" — on any handoff from an approved design to construction, and again whenever a half-built plan is picked back up: "keep going", "continue the build", or a session that compacted, crashed, or restarted mid-plan. Applies even when nobody names a skill.
 ---
 
 # Batched Implementation

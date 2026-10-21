@@ -1,6 +1,7 @@
 ---
 name: gathering-context
-description: Assemble the context an implementer needs BEFORE any code is written — the constraints, how it must not be done, the shape and its trap, what prior art lets you delete, and what "done" means. Use at the start of any non-trivial build: a new function, feature, endpoint, schema, AI capability, or product, and whenever you are about to write against an unfamiliar stack or a surface where being wrong is expensive. Fires before compound-v:writing-plans and before any implementation. Run scripts/alpha.sh to sweep every verified source lane at once. Skip it for a typo, a rename, a config flip, or a change you could describe in one sentence.
+description: >-
+  Assemble the context an implementer needs BEFORE any code is written — the constraints, how it must not be done, the shape and its trap, what prior art lets you delete, and what "done" means. Use at the start of any non-trivial build: a new function, feature, endpoint, schema, AI capability, or product, and whenever you are about to write against an unfamiliar stack or a surface where being wrong is expensive. Fires before compound-v:writing-plans and before any implementation. Run scripts/alpha.sh to sweep every verified source lane at once. Skip it for a typo, a rename, a config flip, or a change you could describe in one sentence.
 ---
 
 # Gathering Context

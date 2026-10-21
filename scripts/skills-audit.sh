@@ -72,7 +72,7 @@ for f in skills/*/SKILL.md; do
   ns="$(awk -v k="compound-v:$s" '$2 == k {print $1}' "$tally")"; ns="${ns:-0}"
   bare="$(awk -v k="$s" '$2 == k {print $1}' "$tally")"; bare="${bare:-0}"
   [ "$bare" -gt 0 ] && shadowed=1
-  desc="$(awk '/^description:/{sub(/^description: */, ""); print; exit}' "$f")"
+  desc="$(awk '/^description:/{sub(/^description: */,""); if ($0 ~ /^[>|][-+]?$/) {b=1; next} print; exit} b && /^[ \t]/{sub(/^[ \t]+/,""); o = o (o == "" ? "" : " ") $0; next} b{print o; exit}' "$f")"
   flags=''
   [ "$((ns + bare))" -eq 0 ] && flags='never-fired'
   case "$desc" in *[Oo]pt-in*|*"o not auto-trigger"*) flags="${flags:+$flags }opt-in" ;; esac

@@ -1,6 +1,7 @@
 ---
 name: finishing
-description: Wrap up a completed branch — verify the full suite is green with fresh evidence, then land it safely: merge, PR, keep or discard. Use when implementation is done and rechecked and you need to integrate or close out the work — "wrap this up", "merge it", "open a PR", "are we done here", "clean up the branch".
+description: >-
+  Wrap up a completed branch — verify the full suite is green with fresh evidence, then land it safely: merge, PR, keep or discard. Use when implementation is done and rechecked and you need to integrate or close out the work — "wrap this up", "merge it", "open a PR", "are we done here", "clean up the branch".
 ---
 
 # Finishing
@@ -25,7 +26,7 @@ Run the full suite this turn and read the exit code yourself — the **compound-
 
 ## Step 2 — Pick the landing path
 
-**The landing path is an intake decision — read `## Decisions` in `.claude/STATE.md` and take it.** With nothing decided, take the **reversible** default — commit on the branch, leave it standing — and report what you did. Every path past that is a **hard gate** unless **Decisions** already holds the user's yes for it: pushing and opening a PR (outward-facing), merging into the default branch, force-pushing, discarding work. Send the pending ones in one message with the run's report; a worker sends it to the master by `SendMessage`. Put the gate as a small structured choice, not an open-ended "what now?":
+**The landing path is an intake decision — read `## Decisions` in `.claude/STATE.md` and take it.** With nothing decided, take the **reversible** default — commit on the branch, leave it standing — and report what you did. Pushing and opening a PR is outward-facing: a **hard gate** unless **Decisions** already holds the user's yes for it. Merging into the default branch, force-pushing and discarding are irreversible: asked at the moment, every time — no intake answer pre-approves them. Send the pending ones in one message with the run's report; a worker sends it to the master by `SendMessage`. Put the gate as a small structured choice, not an open-ended "what now?":
 
 1. **Merge locally** into the base branch.
 2. **Push and open a PR.**
@@ -64,7 +65,7 @@ curated table becomes an index.
 
 **The PR body is an artifact, not a title — put the evidence inside the repo's two native sections, don't invent a competing layout.** Under `#### Summary`, at most three bullets on what changed and why, plus the review verdict (`APPROVED`) and any follow-up you deliberately deferred. Under `#### Test plan`, a checklist whose items are the **actual commands you ran and their result lines** — `pytest -q → 214 passed`, never "tests pass". A reviewer should be able to trust the branch from the body alone.
 
-**Discard or any destructive cleanup:** require a **typed confirmation** ("type `discard` to confirm") — a yes/no is too easy to fire by reflex, and this is the one path no intake answer pre-approves. Make that confirmation *informed* by first surfacing the work that would vanish unrecoverably: **unpushed commits** (`git log --branches --not --remotes --oneline`, or `git log <base>..HEAD`), which no status check will show you.
+**Discard or any destructive cleanup:** require a **typed confirmation** ("type `discard` to confirm") — a yes/no is too easy to fire by reflex, and no intake answer stands in for it. Make that confirmation *informed* by first surfacing the work that would vanish unrecoverably: **unpushed commits** (`git log --branches --not --remotes --oneline`, or `git log <base>..HEAD`), which no status check will show you.
 
 **Where this hands next.** On a Large run the landing is not the end: **compound-v:get-shit-done**'s stage 4 (**compound-v:get-shit-done-4-reckon**) is the product-level done-gate and it runs *after* this skill, once, over the assembled product — `using-compound-v` routes it that way and nothing else in the kit closes over the whole build. On Standard and below, landing is the end.
 

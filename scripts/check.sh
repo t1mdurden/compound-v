@@ -157,7 +157,8 @@ done | sort -u | grep -vE '^(name|description|when_to_use|argument-hint|argument
 DESC_CAP="${COMPOUND_V_DESC_CAP:-1536}"
 desc_total=0
 for f in skills/*/SKILL.md; do
-  d="$(awk '/^description:/{sub(/^description: */,""); print; exit}' "$f")"
+  # A `description: >-` block scalar (strict YAML for text holding ": ") continues on indented lines.
+  d="$(awk '/^description:/{sub(/^description: */,""); if ($0 ~ /^[>|][-+]?$/) {b=1; next} print; exit} b && /^[ \t]/{sub(/^[ \t]+/,""); o = o (o == "" ? "" : " ") $0; next} b{print o; exit}' "$f")"
   w="$(awk '/^when_to_use:/{sub(/^when_to_use: */,""); print; exit}' "$f")"
   n=$(( ${#d} + ${#w} ))
   desc_total=$((desc_total + n))

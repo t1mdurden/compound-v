@@ -44,9 +44,9 @@ That is what makes *"we're at about 90%"* unsayable. Five invariants hold it up,
 - **Flip** — green only on a check seen **red first, for the right reason** (**compound-v:test-driven-development**'s red step) plus an end-to-end run driven as a user.
 - **Delta** — appending is legal, flipping is not. A drop declares its kind: `void` (nothing owed) or `moved` (a successor row is mandatory). A drop that moved and named no successor is how a capability quietly empties out.
 - **Blocked is not done** — three failed attempts marks a row `blocked`, blocker named (**compound-v:systematic-debugging** owns the cap). Give the run a legal way to say *this did not work*.
-**The agent may not edit what grades it.** Status flips, appended rows and stage-2 slice fields (`shape`, `trap`, `delete`, `force`) are legal writes; a row's `does`, a drop already made, and any check are frozen. A superseded `shape` is appended to rather than overwritten, carrying what falsified it.
+**The agent may not edit what grades it.** Status flips, appended rows and stage-2 slice fields (`shape`, `trap`, `delete`, `force`) are legal writes; a row's `does`, a drop already made, and any check are frozen. A superseded `shape` is appended to rather than overwritten, carrying what falsified it. Models trained on gameable environments generalize to *directly rewriting their own reward function*.
 
-**The ledger needs an engine, or it is only a record of where you stopped.** This kit ships one: a `Stop` hook that **refuses the exit** while any row is open or the ledger cannot be read honestly — an unreadable row counts as open, never done. `bash scripts/ledger.sh --open` prints the same number for a human.
+**The ledger needs an engine, or it is only a record of where you stopped.** This kit ships one: a `Stop` hook that **refuses the exit** while any row is open or the ledger cannot be read honestly — an unreadable row counts as open, never done. Capped at one block per turn. `bash scripts/ledger.sh --open` prints the same number for a human.
 
 The run holds two files, both scaffolding, both deleted when it ends: **`.claude/STATE.md`** (prose, owned by **compound-v:handoff** — its **Next** names a row id) and **`.claude/slices.json`**. JSON deliberately: the model is *"less likely to inappropriately change or overwrite JSON files compared to Markdown files"*.
 
@@ -79,6 +79,7 @@ Nothing here blocks on its own; every row routes back to a stage, and the clamp 
 | Smell | What it means |
 |---|---|
 | Recon came back and the plan got *bigger* | You researched how to build it, not whether to. Re-run stage 2 for the DELETE list. |
+| The architecture arrived before the second fact | The overestimate failing loud. Two lookups usually collapse the design; do them first. |
 | A slice with a check like "it looks right" | Not a slice yet: the verifiable criterion is what makes the speed real. **compound-v:frame-the-goal**. |
 | "Basically done, just polish left" / "this laid the foundations" | Nothing a user can do today that they couldn't yesterday, counted as nearly finished. Name what's left; that list is the remaining project. |
 | A ledger bit flipped without a walk, or a check edited late in the run | The two failure modes this skill is built around. Confirm the check goes red without the change, and suspect it hardest at the end of a long run. |
