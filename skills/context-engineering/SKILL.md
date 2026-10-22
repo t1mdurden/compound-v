@@ -1,6 +1,7 @@
 ---
 name: context-engineering
-description: Curate the smallest high-signal token set for an agent or long task — manage context rot, retrieval, compaction, and KV-cache. Use when context is filling up, a long-running task spans many turns, you're designing an agent harness or system prompt, deciding what to load vs. retrieve, or the agent is "getting dumber," slower, or more expensive as the session grows.
+description: >-
+  Curate the smallest high-signal context for an agent or long task; use when context fills up or quality degrades.
 ---
 
 # Context Engineering

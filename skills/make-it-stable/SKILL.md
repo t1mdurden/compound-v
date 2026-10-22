@@ -1,7 +1,7 @@
 ---
 name: make-it-stable
 description: >-
-  Make a chosen mechanism produce the right result every time, not just in the demo — output checks that catch silent failure, determinism where you can get it, bounded retry / classify / cross-model-failover, and idempotent side effects. Opt-in (manual): invoke when the user asks to make something reliable, stable, or production-ready, names this skill, or another Compound V skill hands off here. Do not auto-trigger on incidental mentions of money / data / APIs.
+  Opt-in: make a chosen mechanism right every time with output checks, bounded retries, idempotency; use only when the user asks.
 ---
 
 # Make It Stable

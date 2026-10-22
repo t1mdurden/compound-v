@@ -1,6 +1,7 @@
 ---
 name: designing-agents
-description: Pick the least-structure design that solves an AI/LLM feature, and design the tools it calls — climb from a single call up to autonomous agents and sub-agents only when complexity demonstrably earns its keep. Use when deciding "should this be an agent or a workflow?", "how many agents?", whether to add a loop or tools or sub-agents, when architecting any multi-step LLM pipeline, or when writing or fixing a tool or MCP definition — including an agent that keeps picking the wrong tool or passing wrong arguments — even when the ask is just "make this smarter."
+description: >-
+  Pick the least-structure LLM design and its tool definitions; use when deciding agent versus workflow or fixing tool misuse.
 ---
 
 # Designing Agents

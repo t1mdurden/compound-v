@@ -1,7 +1,7 @@
 ---
 name: frame-the-goal
 description: >-
-  Define what "works" means for a goal as a check a person or a verifier can actually run, before any mechanism is chosen. Opt-in (manual): invoke when the user asks to frame or scope a goal, or to pin down what "works" / "done right" means — "help me frame this", "what should the success check be", "define the acceptance criteria", "break this big goal into checkable pieces" — names this skill, or another Compound V skill hands off here; simplest-thing-that-works routes here once "works" isn't a check yet. Do not auto-trigger on every incoming goal.
+  Opt-in: define a goal's success as a runnable check before any mechanism is chosen; use only when the user asks.
 ---
 
 # Frame the Goal

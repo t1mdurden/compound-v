@@ -1,6 +1,7 @@
 ---
 name: using-compound-v
-description: Routes any task to the right Compound V skill and the right effort tier before work starts. Use at the start of every task — scoping, building, reviewing, design, or a quick fix — to decide what's worth doing and how much machinery it deserves.
+description: >-
+  Routes a task to the right Compound V skill and effort tier; use at the start of a task.
 ---
 
 # Using Compound V

@@ -1,7 +1,7 @@
 ---
 name: architecting-ai-systems
 description: >-
-  Design the architecture of a system around a frontier model — harness thickness, the one hard primitive to build, the retrieval shape, whether to build a reward-generating environment, what to delete on the next model release. Opt-in (manual): invoke when the user explicitly asks to design or architect an AI system or product — "help me design the AI architecture for my project", "wrapper or primitive?" — names this skill, or another Compound V skill hands off here. Do not auto-trigger on incidental "make it smarter" mentions; this is a deliberate deep-dive.
+  Opt-in: design the architecture of a system built around a frontier model; use only when the user asks.
 ---
 
 # Architecting AI Systems

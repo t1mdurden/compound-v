@@ -1,6 +1,7 @@
 ---
 name: founder-distribution
-description: Pressure-tests how a product will actually reach people — first-100 sequencing, channel choice, entry friction, and whether a number means anything. Use when there are no users or growth has stalled, when picking or defending an acquisition channel, when deciding what to gate or what to send, when a launch or roadmap assumes users will simply arrive, or whenever a plan grows the product but not its reach — even if nobody asked about distribution. This is the distribution leg of the master gate; startup-taste judges whether to build, product-taste judges whether it's well made.
+description: >-
+  Pressure-test how a product reaches its first users; use when there are no users, growth stalled, or picking a channel.
 ---
 
 # Founder Distribution

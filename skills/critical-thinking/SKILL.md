@@ -1,6 +1,7 @@
 ---
 name: critical-thinking
-description: Distrust your own reasoning before you commit to it — the in-flight self-skepticism pass over a conclusion you are about to state as the answer. Use when you're about to commit to a conclusion, recommendation, design rationale, root-cause call, or verdict that feels obviously right; when your own confidence is the main thing backing it and every piece of evidence you hold happens to agree; when someone asks "are you sure?"; when picking between options or defending the one you already prefer; and whenever the call is load-bearing or hard to reverse — even unprompted. Self-skepticism over your OWN reasoning; recheck reviews finished work, verification-before-completion proves an output, startup-taste judges whether to build.
+description: >-
+  Self-skepticism pass over your own conclusion; use before committing to a load-bearing verdict that feels obviously right.
 ---
 
 # Critical Thinking
